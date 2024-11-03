@@ -15,8 +15,8 @@ body {
     --radius: 0.5rem;
     --color-background: #e6f0ff; /* Светлый фон */
     --color-text: #000000; /* Черный текст */
-    --sidebar-background: #f2f2f2; /* Светлый фон сайдбара */
-    --sidebar-foreground: #c8c8cc; /* Темный текст сайдбара */
+    --sidebar-background: #ffffff; /* Светлый фон сайдбара */
+    --sidebar-foreground: #000000; /* Темный текст сайдбара */
     --sidebar-primary: #3b1e0a; /* Основной цвет сайдбара */
     --sidebar-primary-foreground: #ffffff; /* Белый текст на основном фоне */
     --sidebar-accent: #f3f3f3; /* Цвет акцента */
