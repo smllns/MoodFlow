@@ -1,21 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;400;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Roboto Mono", monospace;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease; /* Для плавного перехода */
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --color-background: #e6f0ff; /* Светлый фон */
+    --color-text: #000000; /* Черный текст */
+    --sidebar-background: #f2f2f2; /* Светлый фон сайдбара */
+    --sidebar-foreground: #c8c8cc; /* Темный текст сайдбара */
+    --sidebar-primary: #3b1e0a; /* Основной цвет сайдбара */
+    --sidebar-primary-foreground: #ffffff; /* Белый текст на основном фоне */
+    --sidebar-accent: #f3f3f3; /* Цвет акцента */
+    --sidebar-accent-foreground: #3b1e0a; /* Цвет текста акцента */
+    --sidebar-border: #d3d3d3; /* Цвет границы */
+    --sidebar-ring: #d9e7e0; /* Цвет для эффекта обводки */
+  }
+
+  html.dark {
+    --color-background: #181818; /* Темная тема */
+    --color-text: #ffffff; /* Белый текст */
+    --sidebar-background: #000000; /* Черный фон для сайдбара */
+    --sidebar-foreground: #e7e7f5; /* Светлые текстовые элементы */
+    --sidebar-primary: #e05d30; /* Цвет для основных элементов */
+    --sidebar-primary-foreground: #ffffff; /* Белый цвет текста */
+    --sidebar-accent: #4d4d4d; /* Цвет акцента */
+    --sidebar-accent-foreground: #e7e7f5; /* Светлый цвет для текста акцента */
+    --sidebar-border: #4d4d4d; /* Цвет границы */
+    --sidebar-ring: #46a7d8; /* Цвет для эффекта обводки */
+  }
+
+  body {
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-text));
+  }
 }
