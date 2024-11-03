@@ -1,5 +1,5 @@
 'use client';
-import { AppSidebar } from '@/components/app-sidebar';
+import { AppSidebar } from '@/components/AppSidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,14 +18,55 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
 import { useEffect, useState } from 'react';
+import MoodOfTheDayPage from '../pages/MoodOfTheDayPage';
+import CalendarPage from '../pages/CalendarPage';
+import SettingsPage from '../pages/SettingsPage';
+import SleepPage from '../pages/SleepPage';
+import WeatherPage from '../pages/WeatherPage';
+import FactorsPage from '../pages/FactorsPage';
+import FullStatsPage from '../pages/FullStatsPage';
 
 export default function Page() {
-  const [userName, setUserName] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>('User');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState('currmood'); // Начальная страница
+  const [currentPageTitle, setCurrentPageTitle] = useState('Mood of the day'); // Начальный заголовок
+
+  const renderContent = () => {
+    switch (currentPage) {
+      case 'currmood':
+        return <MoodOfTheDayPage />;
+      case 'calendar':
+        return <CalendarPage />;
+      case 'settings':
+        return <SettingsPage />;
+      case 'sleep':
+        return <SleepPage />;
+      case 'weather':
+        return <WeatherPage />;
+      case 'factors':
+        return <FactorsPage />;
+      case 'fullstats':
+        return <FullStatsPage />;
+      default:
+        return <MoodOfTheDayPage />;
+    }
+  };
+  const getTitleFromPage = (page: string) => {
+    const titles: { [key: string]: string } = {
+      currmood: 'Mood of the day',
+      calendar: 'Calendar',
+      settings: 'Settings',
+      sleep: 'Mood and Sleep',
+      weather: 'Mood and Weather',
+      factors: 'Mood and Factors',
+      fullstats: 'Statistics',
+    };
+    return titles[page] || 'Mood of the day';
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -80,7 +121,7 @@ export default function Page() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar />
+      <AppSidebar userName={userName} setCurrentPage={setCurrentPage} />
       <SidebarInset>
         <header className='flex h-16 shrink-0 items-center gap-2 px-4'>
           <SidebarTrigger className='-ml-1' />
@@ -88,23 +129,22 @@ export default function Page() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>Data</BreadcrumbPage>
+                <BreadcrumbPage>{getTitleFromPage(currentPage)}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
+          {renderContent()}
+        </div>
+        {/* <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
           <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
             <div className='aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50' />
             <div className='aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50' />
             <div className='aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50' />
           </div>
-          <div className='min-h-[100vh] flex-1 rounded-xl bg-neutral-100/50 md:min-h-min dark:bg-neutral-800/50'>
-            <h1 className='text-3xl font-bold dark:text-[#e6f0ff] text-[#18181b]'>
-              Welcome, {userName ? userName : 'User'}!
-            </h1>
-          </div>
-        </div>
+          <div className='min-h-[100vh] flex-1 rounded-xl bg-neutral-100/50 md:min-h-min dark:bg-neutral-800/50'></div>
+        </div> */}
       </SidebarInset>
     </SidebarProvider>
   );

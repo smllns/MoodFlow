@@ -7,35 +7,35 @@ body {
   font-family: "Roboto Mono", monospace;
   transition:
     background-color 0.3s ease,
-    color 0.3s ease; /* Для плавного перехода */
+    color 0.3s ease;
 }
 
 @layer base {
   :root {
     --radius: 0.5rem;
-    --color-background: #e6f0ff; /* Светлый фон */
-    --color-text: #000000; /* Черный текст */
-    --sidebar-background: #ffffff; /* Светлый фон сайдбара */
-    --sidebar-foreground: #000000; /* Темный текст сайдбара */
-    --sidebar-primary: #3b1e0a; /* Основной цвет сайдбара */
-    --sidebar-primary-foreground: #ffffff; /* Белый текст на основном фоне */
-    --sidebar-accent: #f3f3f3; /* Цвет акцента */
-    --sidebar-accent-foreground: #3b1e0a; /* Цвет текста акцента */
-    --sidebar-border: #d3d3d3; /* Цвет границы */
-    --sidebar-ring: #d9e7e0; /* Цвет для эффекта обводки */
+    --color-background: #e6f0ff;
+    --color-text: #000000;
+    --sidebar-background: #ffffff;
+    --sidebar-foreground: #000000;
+    --sidebar-primary: #3b1e0a;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f3f3f3;
+    --sidebar-accent-foreground: #3b1e0a;
+    --sidebar-border: #d3d3d3;
+    --sidebar-ring: #d9e7e0;
   }
 
   html.dark {
-    --color-background: #181818; /* Темная тема */
-    --color-text: #ffffff; /* Белый текст */
-    --sidebar-background: #000000; /* Черный фон для сайдбара */
-    --sidebar-foreground: #e7e7f5; /* Светлые текстовые элементы */
-    --sidebar-primary: #e05d30; /* Цвет для основных элементов */
-    --sidebar-primary-foreground: #ffffff; /* Белый цвет текста */
-    --sidebar-accent: #4d4d4d; /* Цвет акцента */
-    --sidebar-accent-foreground: #e7e7f5; /* Светлый цвет для текста акцента */
-    --sidebar-border: #4d4d4d; /* Цвет границы */
-    --sidebar-ring: #46a7d8; /* Цвет для эффекта обводки */
+    --color-background: #181818;
+    --color-text: #ffffff;
+    --sidebar-background: #000000;
+    --sidebar-foreground: #e7e7f5;
+    --sidebar-primary: #e05d30;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #4d4d4d;
+    --sidebar-accent-foreground: #e7e7f5;
+    --sidebar-border: #4d4d4d;
+    --sidebar-ring: #46a7d8;
   }
 
   body {

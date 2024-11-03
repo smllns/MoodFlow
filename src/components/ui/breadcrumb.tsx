@@ -20,7 +20,7 @@ const BreadcrumbList = React.forwardRef<
   <ol
     ref={ref}
     className={cn(
-      'flex flex-wrap items-center gap-1.5 break-words text-sm text-neutral-500 sm:gap-2.5 dark:text-neutral-400',
+      'flex flex-wrap items-center gap-1.5 break-words text-sm text-neutral-500 pt-4 sm:gap-2.5 dark:text-neutral-400',
       className
     )}
     {...props}
@@ -34,7 +34,7 @@ const BreadcrumbItem = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <li
     ref={ref}
-    className={cn('inline-flex items-center gap-1.5', className)}
+    className={cn('inline-flex items-center gap-1.5 ', className)}
     {...props}
   />
 ));
@@ -71,7 +71,7 @@ const BreadcrumbPage = React.forwardRef<
     aria-disabled='true'
     aria-current='page'
     className={cn(
-      'font-normal text-neutral-950 dark:text-neutral-50',
+      'font-normal text-neutral-950 dark:text-neutral-50 ',
       className
     )}
     {...props}
@@ -87,7 +87,7 @@ const BreadcrumbSeparator = ({
   <li
     role='presentation'
     aria-hidden='true'
-    className={cn('[&>svg]:w-3.5 [&>svg]:h-3.5', className)}
+    className={cn('[&>svg]:w-3.5 [&>svg]:h-3.5 ', className)}
     {...props}
   >
     {children ?? <ChevronRight />}
