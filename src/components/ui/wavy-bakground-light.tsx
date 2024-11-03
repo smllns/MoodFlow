@@ -102,13 +102,26 @@ export const WavyBackgroundLight = ({
   }, []);
 
   const [isSafari, setIsSafari] = useState(false);
-  document.body.style.backgroundColor = '#e6f0ff';
+  // document.body.style.backgroundColor = '#e6f0ff';
+  // useEffect(() => {
+  //   setIsSafari(
+  //     typeof window !== 'undefined' &&
+  //       navigator.userAgent.includes('Safari') &&
+  //       !navigator.userAgent.includes('Chrome')
+  //   );
+  // }, []);
   useEffect(() => {
-    setIsSafari(
-      typeof window !== 'undefined' &&
+    // Проверяем, что код выполняется на стороне клиента
+    if (typeof window !== 'undefined') {
+      // Устанавливаем цвет фона
+      document.body.style.backgroundColor = '#e6f0ff';
+
+      // Определяем, является ли браузер Safari
+      setIsSafari(
         navigator.userAgent.includes('Safari') &&
-        !navigator.userAgent.includes('Chrome')
-    );
+          !navigator.userAgent.includes('Chrome')
+      );
+    }
   }, []);
 
   return (
