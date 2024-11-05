@@ -62,7 +62,7 @@ const SleepStep: React.FC<SleepStepProps> = ({
             <SelectContent>
               <SelectGroup>
                 {Array.from({ length: 24 }, (_, hour) => (
-                  <SelectItem key={hour} value={hour}>
+                  <SelectItem key={hour} value={hour.toString()}>
                     {hour} {hour === 1 ? 'hour' : 'hours'}
                   </SelectItem>
                 ))}
