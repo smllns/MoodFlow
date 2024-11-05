@@ -1,6 +1,6 @@
 'use client';
 import { auth, db } from '@/lib/firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -58,5 +58,59 @@ export const login = async (email: string, password: string): Promise<void> => {
     } else {
       throw new Error('🦨 Login failed. Please try again.');
     }
+  }
+};
+
+export const saveMoodData = async (
+  getMood: () => string,
+  selectedFactors: string[],
+  hoursOfSleep: number | string | null,
+  weather: string,
+  currentDate: string
+): Promise<void> => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error('User is not authenticated');
+    return;
+  }
+
+  const moodData = {
+    mood: getMood(),
+    factors: selectedFactors,
+    sleep: hoursOfSleep,
+    weather,
+  };
+
+  const userDocRef = doc(db, `users/${user.uid}/mood/${currentDate}`);
+
+  try {
+    await setDoc(userDocRef, moodData);
+    console.log('Mood data saved successfully');
+  } catch (error) {
+    console.error('Error saving mood data:', error);
+  }
+};
+
+export const fetchMoodData = async (currentDate: string): Promise<any> => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error('User is not authenticated');
+    return null;
+  }
+  const userDocRef = doc(db, `users/${user.uid}/mood/${currentDate}`);
+  try {
+    const docSnap = await getDoc(userDocRef);
+    if (docSnap.exists()) {
+      console.log('Mood data fetched successfully:', docSnap.data());
+      return docSnap.data();
+    } else {
+      console.log('No mood data found for this date.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching mood data:', error);
+    return null;
   }
 };

@@ -82,7 +82,7 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size='lg' asChild>
-              <a href='/userprofile'>
+              <a href='#'>
                 <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-[#f5f5f5] dark:bg-[#181818]  text-[#11111a] dark:text-[#ffffff]'>
                   <p className='text-base'>💖</p>
                 </div>

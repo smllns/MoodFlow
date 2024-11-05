@@ -7,8 +7,6 @@ import Registration from '@/components/Registration';
 import { signOut } from 'firebase/auth';
 
 export default function HomePage() {
-  const router = useRouter();
-
   useEffect(() => {
     const currentUser = auth.currentUser;
 
