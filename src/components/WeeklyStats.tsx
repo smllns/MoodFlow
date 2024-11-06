@@ -69,7 +69,7 @@ const WeeklyStats = ({
       date.setDate(today.getDate() - i);
       const dayName = daysOfWeek[(currentDayIndex - i + 7) % 7];
       const formattedDate = `${date.getDate()}.${date.getMonth() + 1}`;
-      const formattedDateForFetch = date.toISOString().split('T')[0];
+      const formattedDateForFetch = date.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
       weekDaysWithDates.push([dayName, formattedDate, formattedDateForFetch]);
     }
 

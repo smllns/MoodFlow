@@ -1,6 +1,6 @@
 'use client';
 import { auth, db } from '@/lib/firebaseConfig';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -112,5 +112,35 @@ export const fetchMoodData = async (currentDate: string): Promise<any> => {
   } catch (error) {
     console.error('Error fetching mood data:', error);
     return null;
+  }
+};
+
+export const fetchAllMoodData = async (): Promise<
+  { date: string; data: any }[]
+> => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error('User is not authenticated');
+    return [];
+  }
+
+  const userMoodCollectionRef = collection(db, `users/${user.uid}/mood`);
+  try {
+    const querySnapshot = await getDocs(userMoodCollectionRef);
+    if (!querySnapshot.empty) {
+      const moodData = querySnapshot.docs.map((doc) => ({
+        date: doc.id, // Use the document ID as the date
+        data: doc.data(),
+      }));
+      console.log('All mood data fetched successfully:', moodData);
+      return moodData;
+    } else {
+      console.log('No mood data found for this user.');
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching all mood data:', error);
+    return [];
   }
 };

@@ -32,6 +32,7 @@ const TodayMoodStep: React.FC<TodayMoodStep> = ({
   const [moodData, setMoodData] = useState<MoodData | null>(null);
 
   const formattedDate = formatDate(selectedDate);
+
   const handleFetchMood = async (selectedDate: string) => {
     setLoading(true);
     const fetchedMoodData = await fetchMoodData(selectedDate);

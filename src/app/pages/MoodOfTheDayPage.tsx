@@ -7,8 +7,9 @@ import React, { useState } from 'react';
 const MoodOfTheDayPage = () => {
   const [refreshDataTrigger, setRefreshDataTrigger] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split('T')[0]
+    new Date().toLocaleDateString('en-CA')
   );
+
   const [fullInfo, setFullInfo] = useState<boolean>(false);
   const [step, setStep] = useState<number>(1);
 
