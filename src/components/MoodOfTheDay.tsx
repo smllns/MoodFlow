@@ -81,11 +81,11 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
   return (
     <div className='flex flex-col items-center x0:justify-between lg:justify-center x0:h-[95vh] lg:h-fit'>
       {!fullInfo ? (
-        <h1 className='text-2xl font-bold pt-12 mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
+        <h1 className='text-2xl font-bold x0:pt-28 lg:pt-12 lg:mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
           Set The Mood of The Day
         </h1>
       ) : (
-        <h1 className='text-2xl font-bold pt-12 mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
+        <h1 className='text-2xl font-bold x0:pt-28  lg:pt-12 lg:mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
           A Deep Dive into Your Mood
         </h1>
       )}
