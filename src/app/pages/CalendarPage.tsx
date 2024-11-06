@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar } from '@/components/calendar';
+import { Calendar } from '@/components/Calendar';
 import React, { useState } from 'react';
 
 const CalendarPage = () => {
