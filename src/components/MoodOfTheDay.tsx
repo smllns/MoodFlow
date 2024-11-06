@@ -81,11 +81,11 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
   return (
     <div className='flex flex-col items-center x0:justify-between lg:justify-center x0:h-[95vh] lg:h-fit'>
       {!fullInfo ? (
-        <h1 className='text-2xl font-bold mt-8 mb-8 text-center'>
+        <h1 className='text-2xl font-bold pt-12 mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
           Set The Mood of The Day
         </h1>
       ) : (
-        <h1 className='text-2xl font-bold mt-8 mb-8 text-center'>
+        <h1 className='text-2xl font-bold pt-12 mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
           A Deep Dive into Your Mood
         </h1>
       )}
@@ -159,17 +159,7 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
           />
         )}
       </Card>
-      <p className='x0:relative  x0:text-center  min-w-max pt-4 text-xs text-black dark:text-white'>
-        © 2024 All rights reserved by{' '}
-        <a
-          href='https://www.linkedin.com/in/smllns'
-          className='text-pink-500 hover:text-pink-300 underline '
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          smllns
-        </a>
-      </p>
+      <div></div>
     </div>
   );
 };

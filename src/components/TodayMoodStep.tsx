@@ -38,7 +38,6 @@ const TodayMoodStep: React.FC<TodayMoodStep> = ({
     const fetchedMoodData = await fetchMoodData(selectedDate);
     setLoading(false);
 
-    console.log('Fetched mood data:', fetchedMoodData);
     setMoodData(fetchedMoodData);
   };
 
@@ -53,7 +52,6 @@ const TodayMoodStep: React.FC<TodayMoodStep> = ({
       </div>
     );
   }
-  console.log(moodData);
   return (
     <div className='text-center  flex flex-col justify-between items-center h-full'>
       <CardHeader className='pt-0 pb-0'>

@@ -86,7 +86,6 @@ export const saveMoodData = async (
 
   try {
     await setDoc(userDocRef, moodData);
-    console.log('Mood data saved successfully');
   } catch (error) {
     console.error('Error saving mood data:', error);
   }
@@ -103,10 +102,8 @@ export const fetchMoodData = async (currentDate: string): Promise<any> => {
   try {
     const docSnap = await getDoc(userDocRef);
     if (docSnap.exists()) {
-      console.log('Mood data fetched successfully:', docSnap.data());
       return docSnap.data();
     } else {
-      console.log('No mood data found for this date.');
       return null;
     }
   } catch (error) {
@@ -133,10 +130,8 @@ export const fetchAllMoodData = async (): Promise<
         date: doc.id, // Use the document ID as the date
         data: doc.data(),
       }));
-      console.log('All mood data fetched successfully:', moodData);
       return moodData;
     } else {
-      console.log('No mood data found for this user.');
       return [];
     }
   } catch (error) {
