@@ -12,6 +12,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import ThemeToggle from './ThemeToggle';
 import { Button } from './ui/button';
@@ -59,7 +60,7 @@ const data = {
   ],
 };
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  userName: string; // Добавляем userName как обязательный строковый пропс
+  userName: string;
   setCurrentPage: (page: string) => void;
 }
 export function AppSidebar({
@@ -69,11 +70,17 @@ export function AppSidebar({
 }: AppSidebarProps) {
   const router = useRouter();
 
+  const { isMobile, setOpenMobile } = useSidebar();
+
   const handleLogout = () => {
     router.push('/');
   };
+
   const handleMenuClick = (page: string) => {
-    setCurrentPage(page); // Устанавливаем новую текущую страницу
+    setCurrentPage(page);
+    if (isMobile) {
+      setOpenMobile(false);
+    }
   };
 
   return (

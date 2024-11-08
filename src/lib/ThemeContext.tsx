@@ -28,7 +28,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     document.body.className = themeClass; // Обновляем только класс body
     document.documentElement.className = themeClass; // То же для <html>
 
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('theme', isDark ? 'dark' : '');
   }, [isDark]);
 
   return (

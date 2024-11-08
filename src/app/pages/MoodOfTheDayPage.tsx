@@ -41,7 +41,7 @@ const MoodOfTheDayPage = () => {
           setStep={setStep}
         />
       </div>
-      <p className='absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center  min-w-max text-xs text-black dark:text-white'>
+      <p className=' text-center  min-w-max text-xs text-black dark:text-white'>
         © 2024 All rights reserved by{' '}
         <a
           href='https://www.linkedin.com/in/smllns'

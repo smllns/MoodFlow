@@ -19,6 +19,7 @@ interface MoodOfTheDayProps {
   setFullInfo: (fullInfo: boolean) => void;
   step: number;
   setStep: (step: number) => void;
+  isCalendar: boolean;
 }
 const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
   onDateChange,
@@ -27,6 +28,7 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
   setFullInfo,
   step,
   setStep,
+  isCalendar = false,
 }) => {
   const [sliderValue, setSliderValue] = useState(50);
   const [selectedFactors, setSelectedFactors] = useState<string[]>([]);
@@ -79,16 +81,17 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
   const moodIcon = moodIcons[selectedMood];
 
   return (
-    <div className='flex flex-col items-center x0:justify-between lg:justify-center x0:h-[95vh] lg:h-fit'>
-      {!fullInfo ? (
-        <h1 className='text-2xl font-bold x0:pt-28 lg:pt-12 lg:mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
-          Set The Mood of The Day
-        </h1>
-      ) : (
-        <h1 className='text-2xl font-bold x0:pt-28  lg:pt-12 lg:mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
-          A Deep Dive into Your Mood
-        </h1>
-      )}
+    <div className='flex flex-col items-center justify-center x0:h-[95vh] lg:h-fit'>
+      {!isCalendar &&
+        (!fullInfo ? (
+          <h1 className='text-2xl font-bold x0:pb-2 lg:pt-8 lg:pb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
+            Set The Mood of The Day
+          </h1>
+        ) : (
+          <h1 className='text-2xl font-bold x0:pb-2  lg:pt-8 lg:pb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
+            A Deep Dive into Your Mood
+          </h1>
+        ))}
       <Card
         className={`mx-auto p-5 ${
           fullInfo
@@ -159,7 +162,6 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
           />
         )}
       </Card>
-      <div></div>
     </div>
   );
 };

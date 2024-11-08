@@ -1,7 +1,6 @@
 'use client';
 import { useEffect } from 'react';
 import { auth } from '@/lib/firebaseConfig';
-import { useRouter } from 'next/navigation';
 import Hero from '@/components/Hero';
 import Registration from '@/components/Registration';
 import { signOut } from 'firebase/auth';

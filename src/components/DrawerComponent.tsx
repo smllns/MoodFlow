@@ -27,6 +27,7 @@ const DrawerComponent: React.FC<DrawerComponentProps> = ({
         fullInfo={fullInfo}
         step={step}
         setStep={setStep}
+        isCalendar={true}
       />
     </DrawerContent>
   );

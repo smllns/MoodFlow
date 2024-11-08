@@ -5,16 +5,16 @@ import React from 'react';
 
 const ThemeToggle = () => {
   const { isDark, toggleTheme } = useTheme();
-  const bgSet = () => {
-    if (isDark) {
-      document.body.style.backgroundColor = '#e6f0ff';
-    } else {
-      document.body.style.backgroundColor = 'rgb(24 24 27)';
-    }
-  };
+  // const bgSet = () => {
+  //   if (isDark) {
+  //     document.body.style.backgroundColor = '#e6f0ff';
+  //   } else {
+  //     document.body.style.backgroundColor = 'rgb(24 24 27)';
+  //   }
+  // };
   const handleClick = () => {
     toggleTheme();
-    bgSet();
+    // bgSet();
   };
   return (
     <button

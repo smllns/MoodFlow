@@ -5,6 +5,8 @@
 
 body {
   font-family: "Roboto Mono", monospace;
+  background-color: var(--color-background);
+  color: var(--color-text);
   transition:
     /* background-color 0.3s ease, */ color 0.3s ease;
 }
@@ -22,9 +24,15 @@ body {
     --sidebar-accent-foreground: #3b1e0a;
     --sidebar-border: #d3d3d3;
     --sidebar-ring: #d9e7e0;
+
+    --chart-1: #af56db;
+    --chart-2: #46a7d8;
+    --chart-3: #7cb329;
+    --chart-4: #f6d71c;
+    --chart-5: #e23695;
   }
 
-  html.dark {
+  .dark {
     --color-background: #181818;
     --color-text: #ffffff;
     --sidebar-background: #000000;
@@ -35,10 +43,11 @@ body {
     --sidebar-accent-foreground: #e7e7f5;
     --sidebar-border: #4d4d4d;
     --sidebar-ring: #46a7d8;
-  }
 
-  body {
-    background-color: rgb(var(--color-background));
-    color: rgb(var(--color-text));
+    --chart-1: #af56db;
+    --chart-2: #46a7d8;
+    --chart-3: #7cb329;
+    --chart-4: #f6d71c;
+    --chart-5: #e23695;
   }
 }
