@@ -39,6 +39,7 @@ const MoodOfTheDayPage = () => {
           fullInfo={fullInfo}
           step={step}
           setStep={setStep}
+          isCalendar={false}
         />
       </div>
       <p className=' text-center  min-w-max text-xs text-black dark:text-white'>
