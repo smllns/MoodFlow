@@ -101,19 +101,12 @@ export const WavyBackgroundDark = ({
   }, []);
 
   const [isSafari, setIsSafari] = useState(false);
-  // useEffect(() => {
-  //   document.body.style.backgroundColor = 'rgb(24 24 27)';
-  //   setIsSafari(
-  //     typeof window !== 'undefined' &&
-  //       navigator.userAgent.includes('Safari') &&
-  //       !navigator.userAgent.includes('Chrome')
-  //   );
-  // }, []);
+
   useEffect(() => {
     // Проверяем, что код выполняется на стороне клиента
     if (typeof window !== 'undefined') {
       // Устанавливаем цвет фона
-      document.body.style.backgroundColor = 'rgb(24, 24, 27)';
+      // document.body.style.backgroundColor = 'rgb(24, 24, 27)';
 
       // Определяем, является ли браузер Safari
       setIsSafari(
