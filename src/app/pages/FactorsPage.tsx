@@ -2,6 +2,7 @@
 import React, { useMemo } from 'react';
 import { fetchAllMoodData } from '../functions/authService';
 import FactorsMoodChart from '@/components/FactorsMoodChart';
+import FactorsMoodChartInteractive from '@/components/FactorsMoodChartInteractive';
 export const description = 'Mood distribution based on factors';
 
 interface MoodDataItem {
@@ -50,15 +51,6 @@ const FactorsPage = () => {
   const [monthChartData, setMonthChartData] = React.useState<
     AggregatedDataFactors[]
   >([]);
-  const [averageWeatherData, setAverageWeatherData] = React.useState<
-    string | undefined
-  >();
-  const [averageWeatherDataWeek, setAverageWeatherDataWeek] = React.useState<
-    string | undefined
-  >();
-  const [averageWeatherDataMonth, setAverageWeatherDataMonth] = React.useState<
-    string | undefined
-  >();
 
   const [loading, setLoading] = React.useState(true);
 
@@ -132,36 +124,25 @@ const FactorsPage = () => {
       const weekData = aggregateData(data, weekDays);
       const monthData = aggregateData(data, monthDays);
       setChartData(allData);
-      // setAverageWeatherData(allData.mostFrequentWeather);
-
       setWeekChartData(weekData);
-      // setAverageWeatherDataWeek(weekData.mostFrequentWeather);
-
       setMonthChartData(monthData);
-      // setAverageWeatherDataMonth(monthData.mostFrequentWeather);
-
       setLoading(false);
     };
 
     getMoodData();
   }, []);
 
-  console.log(chartData);
-
   return (
     <div className='flex flex-col items-center gap-10'>
       <h1 className='text-2xl font-bold mt-8  text-center text-[#11111a] dark:text-[#ffffff]'>
-        Mood Based on Weather Conditions
+        Mood Based on Factors
       </h1>
       <FactorsMoodChart chartData={chartData} loading={loading} />
-      {/* <WeatherMoodChartInteractive
-        chartData7={weekChartData}
-        chartData30={monthChartData}
-        info='Information for the last 30 days'
+      <FactorsMoodChartInteractive
+        weekChartData={weekChartData}
+        monthChartData={monthChartData}
         loading={loading}
-        weather7={averageWeatherDataWeek}
-        weather30={averageWeatherDataMonth}
-      /> */}
+      />
       <p className='x0:relative  x0:text-center  min-w-max pt-4 text-xs text-black dark:text-white'>
         © 2024 All rights reserved by{' '}
         <a

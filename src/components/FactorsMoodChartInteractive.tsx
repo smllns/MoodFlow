@@ -23,17 +23,19 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface FactorsMoodChartProps {
-  chartData: AggregatedDataFactors[];
+  weekChartData: AggregatedDataFactors[];
+  monthChartData: AggregatedDataFactors[];
   loading: boolean;
 }
 
-const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
-  chartData,
+const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
+  weekChartData,
+  monthChartData,
   loading,
 }) => {
-  const [activeChartPeriod, setActiveChartPeriod] = useState<'3' | '6'>('3');
+  const [activeChartPeriod, setActiveChartPeriod] = useState<'7' | '30'>('7');
 
-  const handleChartChange = (period: '3' | '6') => {
+  const handleChartChange = (period: '7' | '30') => {
     setActiveChartPeriod(period);
   };
 
@@ -46,77 +48,88 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
   }
 
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
+  const currentDay = currentDate.getDate();
 
-  const monthsMap = monthNames;
-
-  const sortedMonths = Array.from(
-    { length: Number(activeChartPeriod) },
-    (_, i) => {
-      const monthIndex =
-        (currentMonth - (Number(activeChartPeriod) - 1 - i) + 12) % 12;
-      const year = monthIndex > currentMonth ? currentYear - 1 : currentYear;
-      return { monthName: monthsMap[monthIndex], monthIndex, year };
-    }
-  );
-
-  const filteredData = chartData.filter((item) =>
-    sortedMonths.some((month) => month.monthName === item.month)
-  );
-
-  const formattedData = sortedMonths.flatMap(
-    ({ monthName, monthIndex, year }) => {
-      const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
-      return Array.from({ length: daysInMonth }, (_, dayIndex) => {
-        const day = dayIndex + 1;
-        const existingData = filteredData.find(
-          (item) => item.month === monthName && item.date === day
-        );
-
-        return existingData
-          ? {
-              month: monthName,
-              date: day,
-              mood: existingData.mood,
-              factors: existingData.factors,
-            }
-          : {
-              month: monthName,
-              date: day,
-              mood: 0,
-              factors: ['Not stated'],
-            };
+  // Функция для получения данных за последние 7 дней или 30 дней
+  const getSortedDates = (period: number) => {
+    const dates = [];
+    for (let i = 0; i < period; i++) {
+      const date = new Date(currentDate);
+      date.setDate(currentDay - i);
+      dates.push({
+        day: date.getDate(),
+        month: monthNames[date.getMonth()],
+        year: date.getFullYear(),
       });
     }
-  );
-  console.log(formattedData);
+    return dates.reverse(); // Повернуть для отображения с самой последней даты
+  };
+
+  const sortedWeekDates = getSortedDates(7);
+  const sortedMonthDates = getSortedDates(30);
+
+  const formatChartData = (
+    chartData: AggregatedDataFactors[],
+    sortedDates: any[]
+  ) => {
+    const filteredData = chartData.filter((item) =>
+      sortedDates.some(
+        (date) => date.day === item.date && date.month === item.month
+      )
+    );
+
+    return sortedDates.flatMap(({ day, month, year }) => {
+      const existingData = filteredData.find(
+        (item) => item.month === month && item.date === day
+      );
+
+      return existingData
+        ? {
+            month: month,
+            date: day,
+            mood: existingData.mood,
+            factors: existingData.factors,
+          }
+        : {
+            month: month,
+            date: day,
+            mood: 0,
+            factors: ['Not stated'],
+          };
+    });
+  };
+
+  const formattedWeekData = formatChartData(weekChartData, sortedWeekDates);
+  const formattedMonthData = formatChartData(monthChartData, sortedMonthDates);
+  console.log(sortedWeekDates);
 
   return (
     <Card className='bg-gray-100/50 dark:bg-neutral-800/50'>
-      <CardHeader className='flex flex-col items-stretch space-y-0  p-0  border-neutral-200 dark:border-neutral-800'>
+      <CardHeader className='flex flex-col items-stretch space-y-0  p-0 lg:flex-row lg:border-b border-neutral-200 dark:border-neutral-800'>
         <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6 '>
           <CardTitle className='px-6 text-lg'>
             Information for the last{' '}
-            {activeChartPeriod === '3' ? '3 months' : '6 months'}
+            {activeChartPeriod === '7' ? '7 days' : '30 days'}
           </CardTitle>
         </div>
         <div className='flex'>
           <button
-            onClick={() => handleChartChange('3')}
-            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0 border border-neutral-200 dark:border-neutral-800 ${
-              activeChartPeriod === '3' ? 'bg-gray-100 dark:bg-neutral-800' : ''
+            onClick={() => handleChartChange('7')}
+            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0 lg:border-l  lg:border-b-0 lg:border-t-0 lg:px-4 lg:py-2 border border-neutral-200 dark:border-neutral-800 ${
+              activeChartPeriod === '7' ? 'bg-gray-100 dark:bg-neutral-800' : ''
             }`}
           >
-            Last 3 months
+            7 days
           </button>
           <button
-            onClick={() => handleChartChange('6')}
-            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0  border border-neutral-200 dark:border-neutral-800 ${
-              activeChartPeriod === '6' ? 'bg-gray-100 dark:bg-neutral-800' : ''
+            onClick={() => handleChartChange('30')}
+            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0 lg:border-l  lg:border-b-0 lg:border-t-0 lg:px-4 lg:py-2 border border-neutral-200 dark:border-neutral-800 ${
+              activeChartPeriod === '30'
+                ? 'bg-gray-100 dark:bg-neutral-800'
+                : ''
             }`}
           >
-            Last 6 months
+            30 days
           </button>
         </div>
       </CardHeader>
@@ -125,7 +138,12 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
           config={chartConfig}
           className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full '
         >
-          <LineChart accessibilityLayer data={formattedData}>
+          <LineChart
+            accessibilityLayer
+            data={
+              activeChartPeriod === '7' ? formattedWeekData : formattedMonthData
+            }
+          >
             <CartesianGrid vertical={false} />
             <YAxis
               domain={[1, 5]}
@@ -175,7 +193,9 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
               stroke='var(--line)'
               strokeWidth={2}
               dot={({ payload, ...props }) => {
-                const typedPayload = payload as { mood: 1 | 2 | 3 | 4 | 5 | 6 };
+                const typedPayload = payload as {
+                  mood: 1 | 2 | 3 | 4 | 5 | 6;
+                };
                 const color =
                   chartConfig[typedPayload.mood]?.color || 'var(--dot-tr)';
                 return (
@@ -192,11 +212,28 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
             />
           </LineChart>
         </ChartContainer>
-        <div className='flex flex-row justify-around text-neutral-500 dark:text-neutral-400 text-sm font-normal'>
-          {sortedMonths.map((month, index) => (
-            <p key={index}>{month.monthName}</p>
-          ))}
-        </div>
+
+        {activeChartPeriod === '7' && (
+          <div className='x0:hidden xs:flex flex-row justify-around text-neutral-500 dark:text-neutral-400 text-sm font-normal'>
+            {sortedWeekDates.map((date, index) => (
+              <p
+                key={index}
+                className='text-base'
+              >{`${date.day} ${date.month}`}</p>
+            ))}
+          </div>
+        )}
+
+        {/* Блок с датами для 30 дней */}
+        {activeChartPeriod === '30' && (
+          <div className='x0:hidden xl:flex flex-row justify-around text-neutral-500 dark:text-neutral-400 text-sm font-normal'>
+            {sortedMonthDates.map((date, index) => (
+              <p key={index} className='text-lg'>
+                {date.day}
+              </p>
+            ))}
+          </div>
+        )}
       </CardContent>
       <CardFooter className='flex flex-wrap gap-4 items-center justify-center text-sm'>
         {Object.keys(chartConfig).map((key) => {
@@ -217,4 +254,4 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
   );
 };
 
-export default FactorsMoodChart;
+export default FactorsMoodChartInteractive;

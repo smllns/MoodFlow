@@ -14,7 +14,7 @@ const ChartTooltipContentFactors: React.FC<ChartTooltipContentFactorsProps> = ({
   moodColor,
 }) => {
   return (
-    <div className='grid min-w-[8rem] items-start gap-2 rounded-lg border border-neutral-200 border-neutral-200/50 bg-white px-3 py-2 text-xs shadow-xl dark:border-neutral-800 dark:border-neutral-800/50 dark:bg-neutral-950 w-[250px]'>
+    <div className='grid min-w-[8rem] items-start gap-2 rounded-lg border border-neutral-200 border-neutral-200/50 bg-white px-3 py-2 text-sm shadow-xl dark:border-neutral-800 dark:border-neutral-800/50 dark:bg-neutral-950 w-[250px]'>
       <div className='font-medium'>
         <div className='pb-1 text-neutral-500 dark:text-neutral-400'>
           Date:{' '}
