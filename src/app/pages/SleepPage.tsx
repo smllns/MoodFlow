@@ -130,6 +130,7 @@ const SleepPage = () => {
       const data = await fetchAllMoodData();
 
       const allData = aggregateData(data, []);
+
       const weekData = aggregateData(data, weekDays);
       const monthData = aggregateData(data, monthDays);
 

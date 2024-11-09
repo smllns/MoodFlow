@@ -16,7 +16,7 @@ import {
 } from './ui/chart';
 import { CartesianGrid, BarChart, Bar, XAxis } from 'recharts';
 import Image from 'next/image';
-import { AggregatedData } from '@/app/pages/SleepPage';
+import { AggregatedDataWeather } from '@/app/pages/WeatherPage';
 
 const chartConfig = {
   verybad: {
@@ -29,21 +29,21 @@ const chartConfig = {
   verygood: { color: 'var(--chart-5)', label: 'Very good' },
 } satisfies ChartConfig;
 
-interface SleepMoodChartProps {
-  chartData7: AggregatedData[];
-  chartData30: AggregatedData[];
+interface WeatherMoodChartProps {
+  chartData7: AggregatedDataWeather[];
+  chartData30: AggregatedDataWeather[];
   info: string;
   loading: boolean;
-  sleep7: string | undefined;
-  sleep30: string | undefined;
+  weather7: string | undefined;
+  weather30: string | undefined;
 }
-const SleepMoodChartInteractive: React.FC<SleepMoodChartProps> = ({
+const WeatherMoodChartInteractive: React.FC<WeatherMoodChartProps> = ({
   chartData7,
   chartData30,
   info,
   loading,
-  sleep7,
-  sleep30,
+  weather7,
+  weather30,
 }) => {
   const [activeChart, setActiveChart] = React.useState<'7' | '30'>('30');
 
@@ -68,7 +68,8 @@ const SleepMoodChartInteractive: React.FC<SleepMoodChartProps> = ({
             Information for the last {activeChart === '30' ? 30 : 7} days
           </CardTitle>
           <CardDescription className='pb-2 text-sm'>
-            Your average sleep time is {activeChart === '30' ? sleep30 : sleep7}
+            The most frequent weather:{' '}
+            {activeChart === '30' ? weather30 : weather7}
           </CardDescription>
         </div>
         <div className='flex '>
@@ -102,24 +103,47 @@ const SleepMoodChartInteractive: React.FC<SleepMoodChartProps> = ({
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey='sleep'
+              dataKey='weather'
               tickLine={false}
               tickMargin={10}
               axisLine={false}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            {Object.keys(chartConfig).map((key) => {
-              const { label, color } =
-                chartConfig[key as keyof typeof chartConfig];
-              return (
-                <Bar
-                  key={key}
-                  dataKey={label}
-                  fill={color}
-                  radius={[5, 5, 0, 0]}
-                />
-              );
-            })}
+            <Bar
+              dataKey='Very bad'
+              stackId='a'
+              fill='var(--chart-1)'
+              // radius={[0, 0, 4, 4]}
+              radius={0}
+            />
+            <Bar
+              dataKey='Slightly bad'
+              stackId='a'
+              fill='var(--chart-2)'
+              // radius={[4, 4, 0, 0]}
+              radius={0}
+            />
+            <Bar
+              dataKey='Okay'
+              stackId='a'
+              fill='var(--chart-3)'
+              // radius={[4, 4, 0, 0]}
+              radius={0}
+            />
+            <Bar
+              dataKey='Slightly good'
+              stackId='a'
+              fill='var(--chart-4)'
+              // radius={[4, 4, 0, 0]}
+              radius={0}
+            />
+            <Bar
+              dataKey='Very good'
+              stackId='a'
+              fill='var(--chart-5)'
+              // radius={[4, 4, 0, 0]}
+              radius={0}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>
@@ -141,4 +165,4 @@ const SleepMoodChartInteractive: React.FC<SleepMoodChartProps> = ({
   );
 };
 
-export default SleepMoodChartInteractive;
+export default WeatherMoodChartInteractive;

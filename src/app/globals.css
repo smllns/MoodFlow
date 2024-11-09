@@ -24,6 +24,7 @@ body {
     --sidebar-border: #d3d3d3;
     --sidebar-ring: #d9e7e0;
 
+    --line: #4d4d4d;
     --chart-1: #af56db;
     --chart-2: #46a7d8;
     --chart-3: #7cb329;
@@ -42,6 +43,8 @@ body {
     --sidebar-accent-foreground: #e7e7f5;
     --sidebar-border: #4d4d4d;
     --sidebar-ring: #46a7d8;
+
+    --line: #d3d3d3;
 
     --chart-1: #af56db;
     --chart-2: #46a7d8;

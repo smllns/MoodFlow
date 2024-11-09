@@ -97,7 +97,7 @@ export default function Page() {
 
   if (loading) {
     return (
-      <div className='flex items-center justify-center h-screen bg-[#18181b]'>
+      <div className='flex items-center justify-center h-screen bg-[#e6f0ff] dark:bg-[#18181b]'>
         <Image width='100' height='100' src='/loading.gif' alt='Loading...' />
       </div>
     );
