@@ -131,7 +131,7 @@ const SleepPage = () => {
       <SleepMoodChartInteractive
         chartData7={weekChartData}
         chartData30={monthChartData}
-        info='Information for the last 30 days'
+        // info='Information for the last 30 days'
         loading={loading}
         sleep7={averageSleepDataWeek}
         sleep30={averageSleepDataMonth}
