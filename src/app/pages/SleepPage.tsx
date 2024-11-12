@@ -3,15 +3,12 @@ import React, { useMemo } from 'react';
 import { fetchAllMoodData } from '../functions/authService';
 import SleepMoodChart from '@/components/SleepMoodChart';
 import SleepMoodChartInteractive from '@/components/SleepMoodChartInteractive';
-
-export const description = 'Mood distribution based on sleep hours';
-
+import generateDateRange from '@/lib/generateDateRange';
+import { MoodDataItem, MoodType } from '@/lib/constants';
+import Footer from '@/components/ui/footer';
+import PageTitle from '@/components/ui/page-title';
 const sleepCategories = ['<6 h', '7 h', '8 h', '9 h', '>10 h'];
 
-interface MoodDataItem {
-  date: string;
-  data: any;
-}
 interface AggregatedResult {
   aggregated: Record<string, AggregatedData>;
   formattedAverageSleep: string;
@@ -24,13 +21,6 @@ export interface AggregatedData {
   'Slightly good': number;
   'Very good': number;
 }
-
-type MoodType =
-  | 'Very bad'
-  | 'Slightly bad'
-  | 'Okay'
-  | 'Slightly good'
-  | 'Very good';
 
 const SleepPage = () => {
   const [chartData, setChartData] = React.useState<AggregatedData[]>([]);
@@ -52,27 +42,8 @@ const SleepPage = () => {
 
   const [loading, setLoading] = React.useState(true);
 
-  const weekDays = useMemo(() => {
-    const today = new Date();
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i);
-      days.push(date.toLocaleDateString('en-CA'));
-    }
-    return days.reverse();
-  }, []);
-
-  const monthDays = useMemo(() => {
-    const today = new Date();
-    const days = [];
-    for (let i = 0; i < 31; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i);
-      days.push(date.toLocaleDateString('en-CA'));
-    }
-    return days.reverse();
-  }, []);
+  const weekDays = useMemo(() => generateDateRange(7), []);
+  const monthDays = useMemo(() => generateDateRange(31), []);
 
   const aggregateData = (
     data: MoodDataItem[],
@@ -130,7 +101,6 @@ const SleepPage = () => {
       const data = await fetchAllMoodData();
 
       const allData = aggregateData(data, []);
-
       const weekData = aggregateData(data, weekDays);
       const monthData = aggregateData(data, monthDays);
 
@@ -151,9 +121,7 @@ const SleepPage = () => {
 
   return (
     <div className='flex flex-col items-center gap-10'>
-      <h1 className='text-2xl font-bold mt-8  text-center text-[#11111a] dark:text-[#ffffff]'>
-        Mood Based on Sleep Duration
-      </h1>
+      <PageTitle title='Mood Based on Sleep Duration' />
       <SleepMoodChart
         chartData={chartData}
         info='All time information'
@@ -168,17 +136,7 @@ const SleepPage = () => {
         sleep7={averageSleepDataWeek}
         sleep30={averageSleepDataMonth}
       />
-      <p className='x0:relative  x0:text-center  min-w-max pt-4 text-xs text-black dark:text-white'>
-        © 2024 All rights reserved by{' '}
-        <a
-          href='https://www.linkedin.com/in/smllns'
-          className='text-pink-500 hover:text-pink-300 underline '
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          smllns
-        </a>
-      </p>
+      <Footer />
     </div>
   );
 };

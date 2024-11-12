@@ -1,5 +1,6 @@
 'use client';
 
+import Footer from '@/components/ui/footer';
 import MoodOfTheDay from '@/components/MoodOfTheDay';
 import WeeklyStats from '@/components/WeeklyStats';
 import React, { useState } from 'react';
@@ -23,7 +24,7 @@ const MoodOfTheDayPage = () => {
     setFullInfo(true);
   };
   return (
-    <>
+    <div className='lg:h-full lg:flex lg:flex-col lg:justify-between'>
       <WeeklyStats
         refreshDataTrigger={refreshDataTrigger}
         setSelectedDate={setSelectedDate}
@@ -42,18 +43,8 @@ const MoodOfTheDayPage = () => {
           isCalendar={false}
         />
       </div>
-      <p className=' text-center  min-w-max text-xs text-black dark:text-white'>
-        © 2024 All rights reserved by{' '}
-        <a
-          href='https://www.linkedin.com/in/smllns'
-          className='text-pink-500 hover:text-pink-300 underline '
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          smllns
-        </a>
-      </p>
-    </>
+      <Footer />
+    </div>
   );
 };
 

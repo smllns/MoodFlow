@@ -17,22 +17,12 @@ import {
 import { CartesianGrid, BarChart, Bar, XAxis } from 'recharts';
 import Image from 'next/image';
 import { AggregatedData } from '@/app/pages/SleepPage';
-
-const chartConfig = {
-  verybad: {
-    color: 'var(--chart-1)',
-    label: 'Very bad',
-  },
-  slightlybad: { color: 'var(--chart-2)', label: 'Slightly bad' },
-  okay: { color: 'var(--chart-3)', label: 'Okay' },
-  slightlygood: { color: 'var(--chart-4)', label: 'Slightly good' },
-  verygood: { color: 'var(--chart-5)', label: 'Very good' },
-} satisfies ChartConfig;
+import { chartConfig } from '@/lib/constants';
 
 interface SleepMoodChartProps {
   chartData7: AggregatedData[];
   chartData30: AggregatedData[];
-  info: string;
+  // info: string;
   loading: boolean;
   sleep7: string | undefined;
   sleep30: string | undefined;
@@ -40,7 +30,7 @@ interface SleepMoodChartProps {
 const SleepMoodChartInteractive: React.FC<SleepMoodChartProps> = ({
   chartData7,
   chartData30,
-  info,
+  // info,
   loading,
   sleep7,
   sleep30,

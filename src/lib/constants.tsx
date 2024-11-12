@@ -1,5 +1,7 @@
 'use client';
 
+import { ChartConfig } from '@/components/ui/chart';
+
 type Mood =
   | 'Very bad'
   | 'Slightly bad'
@@ -56,3 +58,41 @@ export const weatherOptions = [
   'Stormy',
   'Clear',
 ];
+
+export interface MoodDataItem {
+  date: string;
+  data: any;
+}
+
+export type MoodType =
+  | 'Very bad'
+  | 'Slightly bad'
+  | 'Okay'
+  | 'Slightly good'
+  | 'Very good';
+
+export const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+export const chartConfig = {
+  verybad: {
+    color: 'var(--chart-1)',
+    label: 'Very bad',
+  },
+  slightlybad: { color: 'var(--chart-2)', label: 'Slightly bad' },
+  okay: { color: 'var(--chart-3)', label: 'Okay' },
+  slightlygood: { color: 'var(--chart-4)', label: 'Slightly good' },
+  verygood: { color: 'var(--chart-5)', label: 'Very good' },
+} satisfies ChartConfig;

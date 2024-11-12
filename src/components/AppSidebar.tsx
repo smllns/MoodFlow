@@ -31,7 +31,7 @@ const data = {
       url: '#',
     },
     {
-      title: 'Statistics',
+      title: 'Mood statistics',
       desc: 'fullstats',
       url: '#',
       items: [

@@ -23,6 +23,7 @@ import Image from 'next/image';
 import { moodIcons } from '@/lib/constants';
 import { fetchMoodData } from '@/app/functions/authService';
 import { Skeleton } from './ui/skeleton';
+import PageTitle from './ui/page-title';
 type Mood =
   | 'Very bad'
   | 'Slightly bad'
@@ -143,9 +144,7 @@ const WeeklyStats = ({
   if (loading) {
     return (
       <div className='pt-2 flex flex-col items-center justify-between lg:block lg:justify-start x0:h-[92vh] lg:h-fit '>
-        <h1 className='text-2xl font-bold mt-2 mb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
-          Weekly Stats
-        </h1>
+        <PageTitle title='Weekly Stats' />
         <div className='x0:block lg:hidden pt-2 '>
           <Carousel className='w-full x0:max-w-60 sm:max-w-xl md:max-w-sm mx-auto'>
             <CarouselContent className='-ml-1'>

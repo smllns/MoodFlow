@@ -63,7 +63,7 @@ export default function Page() {
       sleep: 'Mood and Sleep',
       weather: 'Mood and Weather',
       factors: 'Mood and Factors',
-      fullstats: 'Statistics',
+      fullstats: 'Mood statistics',
     };
     return titles[page] || 'Mood of the day';
   };
@@ -137,14 +137,6 @@ export default function Page() {
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
           {renderContent()}
         </div>
-        {/* <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
-            <div className='aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50' />
-            <div className='aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50' />
-            <div className='aspect-video rounded-xl bg-neutral-100/50 dark:bg-neutral-800/50' />
-          </div>
-          <div className='min-h-[100vh] flex-1 rounded-xl bg-neutral-100/50 md:min-h-min dark:bg-neutral-800/50'></div>
-        </div> */}
       </SidebarInset>
     </SidebarProvider>
   );

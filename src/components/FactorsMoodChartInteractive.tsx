@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AggregatedDataFactors, monthNames } from '@/app/pages/FactorsPage';
+import { AggregatedDataFactors } from '@/app/pages/FactorsPage';
 import React from 'react';
 import {
   Card,
@@ -12,6 +12,7 @@ import { ChartConfig, ChartContainer, ChartTooltip } from './ui/chart';
 import { CartesianGrid, XAxis, LineChart, Line, Dot, YAxis } from 'recharts';
 import Image from 'next/image';
 import ChartTooltipContentFactors from './ChartTooltipContentFactors';
+import { monthNames } from '@/lib/constants';
 
 const chartConfig = {
   1: { color: 'var(--chart-1)', label: 'Very bad' },

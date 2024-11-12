@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AggregatedDataFactors, monthNames } from '@/app/pages/FactorsPage';
+import { AggregatedDataFactors } from '@/app/pages/FactorsPage';
 import React from 'react';
 import {
   Card,
@@ -12,6 +12,7 @@ import { ChartConfig, ChartContainer, ChartTooltip } from './ui/chart';
 import { CartesianGrid, XAxis, LineChart, Line, Dot, YAxis } from 'recharts';
 import Image from 'next/image';
 import ChartTooltipContentFactors from './ChartTooltipContentFactors';
+import { monthNames } from '@/lib/constants';
 
 const chartConfig = {
   1: { color: 'var(--chart-1)', label: 'Very bad' },
@@ -93,8 +94,8 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
   console.log(formattedData);
 
   return (
-    <Card className='bg-gray-100/50 dark:bg-neutral-800/50'>
-      <CardHeader className='flex flex-col items-stretch space-y-0  p-0  border-neutral-200 dark:border-neutral-800'>
+    <Card className='bg-gray-100/50 dark:bg-neutral-800/50 '>
+      <CardHeader className='flex flex-col items-stretch space-y-0  p-0   border-neutral-200 dark:border-neutral-800'>
         <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6 '>
           <CardTitle className='px-6 text-lg'>
             Information for the last{' '}

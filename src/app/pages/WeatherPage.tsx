@@ -1,18 +1,13 @@
 'use client';
 import React, { useMemo } from 'react';
 import { fetchAllMoodData } from '../functions/authService';
-import { weatherOptions } from '@/lib/constants';
+import { MoodDataItem, MoodType, weatherOptions } from '@/lib/constants';
 import WeatherMoodChart from '@/components/WeatherMoodChart';
 import WeatherMoodChartInteractive from '@/components/WeatherMoodChartInteractive';
-
-export const description = 'Mood distribution based on weather conditions';
-
+import generateDateRange from '@/lib/generateDateRange';
+import Footer from '@/components/ui/footer';
+import PageTitle from '@/components/ui/page-title';
 const weatherCategories = weatherOptions;
-
-interface MoodDataItem {
-  date: string;
-  data: any;
-}
 
 export interface AggregatedDataWeather {
   weather: string;
@@ -22,13 +17,6 @@ export interface AggregatedDataWeather {
   'Slightly good': number;
   'Very good': number;
 }
-
-type MoodType =
-  | 'Very bad'
-  | 'Slightly bad'
-  | 'Okay'
-  | 'Slightly good'
-  | 'Very good';
 
 const WeatherPage = () => {
   const [chartData, setChartData] = React.useState<AggregatedDataWeather[]>([]);
@@ -47,30 +35,10 @@ const WeatherPage = () => {
   const [averageWeatherDataMonth, setAverageWeatherDataMonth] = React.useState<
     string | undefined
   >();
-
   const [loading, setLoading] = React.useState(true);
 
-  const weekDays = useMemo(() => {
-    const today = new Date();
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i);
-      days.push(date.toLocaleDateString('en-CA'));
-    }
-    return days.reverse();
-  }, []);
-
-  const monthDays = useMemo(() => {
-    const today = new Date();
-    const days = [];
-    for (let i = 0; i < 31; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() - i);
-      days.push(date.toLocaleDateString('en-CA'));
-    }
-    return days.reverse();
-  }, []);
+  const weekDays = useMemo(() => generateDateRange(7), []);
+  const monthDays = useMemo(() => generateDateRange(31), []);
 
   const aggregateData = (
     data: MoodDataItem[],
@@ -81,8 +49,6 @@ const WeatherPage = () => {
   } => {
     const aggregated: Record<string, AggregatedDataWeather> = {};
     const weatherCount: Record<string, number> = {};
-
-    // Initialize weather categories and count
     weatherCategories.forEach((category) => {
       aggregated[category] = {
         weather: category,
@@ -95,7 +61,6 @@ const WeatherPage = () => {
       weatherCount[category] = 0;
     });
 
-    // Aggregate the data
     data.forEach((item) => {
       if (filterDays.includes(item.date) || filterDays.length === 0) {
         const weather = item.data.weather;
@@ -108,7 +73,6 @@ const WeatherPage = () => {
           } else {
             category = '';
           }
-
           if (category) {
             aggregated[category][mood] += 1;
             weatherCount[category] += 1;
@@ -116,16 +80,11 @@ const WeatherPage = () => {
         }
       }
     });
-
-    // Determine the most frequent weather types
     const maxCount = Math.max(...Object.values(weatherCount));
     const mostFrequentWeatherTypes = Object.entries(weatherCount)
       .filter(([_, count]) => count === maxCount)
       .map(([weatherType]) => weatherType);
-
-    // Format the most frequent weather types as a comma-separated string
     const mostFrequentWeather = mostFrequentWeatherTypes.join(', ');
-
     return { aggregated, mostFrequentWeather };
   };
 
@@ -156,9 +115,7 @@ const WeatherPage = () => {
 
   return (
     <div className='flex flex-col items-center gap-10'>
-      <h1 className='text-2xl font-bold mt-8  text-center text-[#11111a] dark:text-[#ffffff]'>
-        Mood Based on Weather Conditions
-      </h1>
+      <PageTitle title='Mood Based on Weather Conditions' />
       <WeatherMoodChart
         chartData={chartData}
         info='All time information'
@@ -173,17 +130,7 @@ const WeatherPage = () => {
         weather7={averageWeatherDataWeek}
         weather30={averageWeatherDataMonth}
       />
-      <p className='x0:relative  x0:text-center  min-w-max pt-4 text-xs text-black dark:text-white'>
-        © 2024 All rights reserved by{' '}
-        <a
-          href='https://www.linkedin.com/in/smllns'
-          className='text-pink-500 hover:text-pink-300 underline '
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          smllns
-        </a>
-      </p>
+      <Footer />
     </div>
   );
 };

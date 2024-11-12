@@ -17,17 +17,7 @@ import {
 import { CartesianGrid, BarChart, Bar, XAxis } from 'recharts';
 import Image from 'next/image';
 import { AggregatedDataWeather } from '@/app/pages/WeatherPage';
-
-const chartConfig = {
-  verybad: {
-    color: 'var(--chart-1)',
-    label: 'Very bad',
-  },
-  slightlybad: { color: 'var(--chart-2)', label: 'Slightly bad' },
-  okay: { color: 'var(--chart-3)', label: 'Okay' },
-  slightlygood: { color: 'var(--chart-4)', label: 'Slightly good' },
-  verygood: { color: 'var(--chart-5)', label: 'Very good' },
-} satisfies ChartConfig;
+import { chartConfig } from '@/lib/constants';
 
 interface WeatherMoodChartProps {
   chartData7: AggregatedDataWeather[];
