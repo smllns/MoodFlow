@@ -1,9 +1,21 @@
 'use client';
 import { auth, db } from '@/lib/firebaseConfig';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from 'firebase/firestore';
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   signInWithEmailAndPassword,
+  updateEmail,
+  updatePassword,
   updateProfile,
 } from 'firebase/auth';
 
@@ -23,7 +35,6 @@ export const register = async (
     const userRef = doc(db, 'users', user.uid);
     await setDoc(userRef, {
       name,
-      email,
     });
   } catch (error: any) {
     if (error.code === 'auth/email-already-in-use') {
@@ -137,5 +148,147 @@ export const fetchAllMoodData = async (): Promise<
   } catch (error) {
     console.error('Error fetching all mood data:', error);
     return [];
+  }
+};
+
+export const deleteAllMoodData = async (): Promise<void> => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error('User is not authenticated');
+    return;
+  }
+
+  const moodCollectionRef = collection(db, `users/${user.uid}/mood`);
+
+  try {
+    // Получаем все документы в коллекции
+    const moodDocsSnapshot = await getDocs(moodCollectionRef);
+
+    // Удаляем каждый документ
+    const deletePromises = moodDocsSnapshot.docs.map((docSnapshot) =>
+      deleteDoc(docSnapshot.ref)
+    );
+
+    await Promise.all(deletePromises);
+  } catch (error) {
+    console.error('Error deleting mood data:', error);
+  }
+};
+
+export const deleteAccount = async (email: string, password: string) => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error('User is not authenticated');
+    return;
+  }
+
+  try {
+    // Создайте учетные данные пользователя для повторной аутентификации
+    const credential = EmailAuthProvider.credential(email, password);
+    // Выполните повторную аутентификацию
+    await reauthenticateWithCredential(user, credential);
+    await deleteAllMoodData();
+    const userRef = doc(db, 'users', user.uid);
+
+    // Удаление основного документа пользователя
+    await deleteDoc(userRef);
+
+    // Удалите пользователя после успешной повторной аутентификации
+    await deleteUser(user);
+
+    // Только после успешного удаления пользователя
+  } catch (error) {
+    // Лог ошибки, если что-то пошло не так
+    console.error('Error deleting account:', error);
+    throw new Error('Failed to delete account. Please try again.'); // Генерация ошибки для обработки в вызывающем коде
+  }
+};
+
+export const getUserDocument = async () => {
+  try {
+    const user = auth.currentUser;
+
+    // Проверяем, что пользователь авторизован
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    // Проверка, существует ли документ
+    if (!userDoc.exists()) {
+      throw new Error('User document does not exist');
+    }
+
+    return userDoc.data(); // Возвращаем данные документа
+  } catch (error) {
+    console.error('Error fetching user document:', error);
+    throw error;
+  }
+};
+
+export const updateUserName = async (name: string) => {
+  try {
+    const user = auth.currentUser;
+
+    // Проверяем, что пользователь авторизован
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+
+    const userDocRef = doc(db, 'users', user.uid);
+
+    // Обновляем имя пользователя, используя setDoc с { merge: true }
+    await setDoc(userDocRef, { name }, { merge: true });
+  } catch (error) {
+    console.error('Error updating user name:', error);
+    throw error;
+  }
+};
+
+export const updateUserEmail = async (
+  newEmail: string,
+  email: string,
+  currentPassword: string
+) => {
+  try {
+    const user = auth.currentUser;
+    if (!user || !user.email) {
+      throw new Error('No authenticated user found.');
+    }
+
+    // Реаутентификация пользователя
+    const credential = EmailAuthProvider.credential(email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    // Отправляем письмо с подтверждением на новый email
+    await updateEmail(user, newEmail); // Этот вызов будет успешным, только если пользователь подтвердит email
+  } catch (error) {
+    console.error('Error updating email:', error);
+    throw error;
+  }
+};
+
+export const updateUserPassword = async (
+  newPassword: string,
+  email: string,
+  currentPassword: string
+) => {
+  try {
+    const user = auth.currentUser;
+    if (!user || !user.email) {
+      throw new Error('No authenticated user found.');
+    }
+
+    // Реаутентификация пользователя
+    const credential = EmailAuthProvider.credential(email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    // Отправляем письмо с подтверждением на новый email
+    await updatePassword(user, newPassword); // Этот вызов будет успешным, только если пользователь подтвердит email
+  } catch (error) {
+    console.error('Error updating email:', error);
+    throw error;
   }
 };

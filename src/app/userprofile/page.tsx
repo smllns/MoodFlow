@@ -33,7 +33,6 @@ export default function Page() {
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState('currmood'); // Начальная страница
-  const [currentPageTitle, setCurrentPageTitle] = useState('Mood of the day'); // Начальный заголовок
 
   const renderContent = () => {
     switch (currentPage) {
@@ -42,7 +41,14 @@ export default function Page() {
       case 'calendar':
         return <CalendarPage />;
       case 'settings':
-        return <SettingsPage />;
+        return (
+          <SettingsPage
+            onRedirectToCurrentMood={() => {
+              setCurrentPage('currmood');
+            }}
+            onNameChange={setUserName}
+          />
+        );
       case 'sleep':
         return <SleepPage />;
       case 'weather':

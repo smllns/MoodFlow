@@ -4,6 +4,7 @@ import './globals.css';
 import Head from 'next/head';
 import { AuthProvider } from '@/lib/AuthContext';
 import { ThemeProvider } from '@/lib/ThemeContext';
+import { Toaster } from '@/components/ui/sonner';
 
 const robotoMono = {
   fontFamily: "'Roboto Mono', monospace",
@@ -31,6 +32,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

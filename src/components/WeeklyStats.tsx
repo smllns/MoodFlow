@@ -208,7 +208,7 @@ const WeeklyStats = ({
           {Array.from({ length: 7 }).map((_, index) => (
             <Skeleton
               key={index}
-              className='lg:w-[85px] lg:h-[85px] xl:w-[123px] xl:h-[123px] 2xl:w-[156px] 2xl:h-[156px] rounded-md'
+              className='lg:w-[85px] lg:h-[85px] xl:w-[123px] xl:h-[123px] 2xl:w-[156px] 2xl:h-[156px] rounded-md mt-5'
             />
           ))}
         </div>

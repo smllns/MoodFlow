@@ -90,7 +90,7 @@ const YearlyMoodPieChart: React.FC<YearlyMoodPieChartProps> = ({
 
   if (loading) {
     return (
-      <Card className='bg-gray-100/50 dark:bg-neutral-800/50 flex items-center justify-center'>
+      <Card className='bg-gray-100/50 dark:bg-neutral-800/50 flex items-center justify-center w-[290px] h-[290px]'>
         <Image width='100' height='100' src='/loading.gif' alt='Loading...' />
       </Card>
     );
