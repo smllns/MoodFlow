@@ -53,6 +53,11 @@ const data = {
       ],
     },
     {
+      title: 'Articles',
+      desc: 'articles',
+      url: '#',
+    },
+    {
       title: 'Settings',
       desc: 'settings',
       url: '#',

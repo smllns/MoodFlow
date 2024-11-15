@@ -2,9 +2,12 @@
 import { AppSidebar } from '@/components/AppSidebar';
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -26,6 +29,7 @@ import SleepPage from '../pages/SleepPage';
 import WeatherPage from '../pages/WeatherPage';
 import FactorsPage from '../pages/FactorsPage';
 import FullStatsPage from '../pages/FullStatsPage';
+import ArticlesPage from '../pages/ArticlesPage';
 
 export default function Page() {
   const [userName, setUserName] = useState<string>('User');
@@ -33,6 +37,13 @@ export default function Page() {
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState('currmood'); // Начальная страница
+  const [isArticles, setIsArticles] = useState(''); // Начальная страница
+  const [article, setArticle] = useState(''); // Начальная страница
+  const handlePageChange = (page: string) => {
+    setIsArticles('');
+    setArticle('');
+    setCurrentPage(page); // Меняем текущую страницу
+  };
 
   const renderContent = () => {
     switch (currentPage) {
@@ -57,6 +68,15 @@ export default function Page() {
         return <FactorsPage />;
       case 'fullstats':
         return <FullStatsPage />;
+      case 'articles':
+        return (
+          <ArticlesPage
+            onArticleCategoryClicked={setIsArticles}
+            onArticleClicked={setArticle}
+            articleCategory={isArticles}
+            article={article}
+          />
+        );
       default:
         return <MoodOfTheDayPage />;
     }
@@ -70,6 +90,7 @@ export default function Page() {
       weather: 'Mood and Weather',
       factors: 'Mood and Factors',
       fullstats: 'Mood statistics',
+      articles: 'Articles',
     };
     return titles[page] || 'Mood of the day';
   };
@@ -127,16 +148,59 @@ export default function Page() {
         } as React.CSSProperties
       }
     >
-      <AppSidebar userName={userName} setCurrentPage={setCurrentPage} />
+      <AppSidebar userName={userName} setCurrentPage={handlePageChange} />
       <SidebarInset>
         <header className='flex h-16 shrink-0 items-center gap-2 px-4'>
           <SidebarTrigger className='-ml-1' />
           <Separator orientation='vertical' className='mr-2 h-4' />
           <Breadcrumb>
             <BreadcrumbList>
+              <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{getTitleFromPage(currentPage)}</BreadcrumbPage>
+                <BreadcrumbPage
+                  className='cursor-pointer'
+                  onClick={() => handlePageChange(currentPage)}
+                >
+                  {getTitleFromPage(currentPage)}
+                </BreadcrumbPage>
               </BreadcrumbItem>
+
+              {isArticles != '' && article === '' && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink>
+                      <BreadcrumbPage
+                        className='cursor-pointer'
+                        onClick={() => setArticle('')}
+                      >
+                        {isArticles}
+                      </BreadcrumbPage>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </>
+              )}
+              {isArticles != '' && article != '' && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbEllipsis
+                      className='cursor-pointer'
+                      onClick={() => setArticle('')}
+                    />
+                  </BreadcrumbItem>
+                </>
+              )}
+              {article != '' && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink>
+                      <BreadcrumbPage>{article}</BreadcrumbPage>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </>
+              )}
             </BreadcrumbList>
           </Breadcrumb>
         </header>
