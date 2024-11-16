@@ -15,6 +15,7 @@ interface ArticleCardProps {
   description: string;
   articles: string[];
   onArticleCategoryClicked: (articleCategoryName: string) => void;
+  setCurrentPage: (currentPage: string) => void;
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({
@@ -22,9 +23,11 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   description,
   articles,
   onArticleCategoryClicked,
+  setCurrentPage,
 }) => {
   const handleClick = () => {
     onArticleCategoryClicked(title);
+    setCurrentPage('articles');
   };
   return (
     <Card className='flex flex-col border border-neutral-200 shadow-sm dark:border-neutral-800 rounded-lg bg-gray-100/50 hover:bg-gray-200/50 dark:bg-neutral-800/50 dark:hover:bg-neutral-700/50'>

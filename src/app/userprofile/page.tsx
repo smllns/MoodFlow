@@ -61,13 +61,33 @@ export default function Page() {
           />
         );
       case 'sleep':
-        return <SleepPage />;
+        return (
+          <SleepPage
+            onArticleCategoryClicked={setIsArticles}
+            setCurrentPage={setCurrentPage}
+          />
+        );
       case 'weather':
-        return <WeatherPage />;
+        return (
+          <WeatherPage
+            onArticleCategoryClicked={setIsArticles}
+            setCurrentPage={setCurrentPage}
+          />
+        );
       case 'factors':
-        return <FactorsPage />;
+        return (
+          <FactorsPage
+            onArticleCategoryClicked={setIsArticles}
+            setCurrentPage={setCurrentPage}
+          />
+        );
       case 'fullstats':
-        return <FullStatsPage />;
+        return (
+          <FullStatsPage
+            onArticleCategoryClicked={setIsArticles}
+            setCurrentPage={setCurrentPage}
+          />
+        );
       case 'articles':
         return (
           <ArticlesPage
@@ -75,6 +95,7 @@ export default function Page() {
             onArticleClicked={setArticle}
             articleCategory={isArticles}
             article={article}
+            setCurrentPage={setCurrentPage}
           />
         );
       default:

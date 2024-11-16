@@ -1,12 +1,19 @@
 'use client';
 import React, { useMemo } from 'react';
 import { fetchAllMoodData } from '../functions/authService';
-import { MoodDataItem, MoodType, weatherOptions } from '@/lib/constants';
+import {
+  articlesData,
+  MoodDataItem,
+  MoodType,
+  PageProps,
+  weatherOptions,
+} from '@/lib/constants';
 import WeatherMoodChart from '@/components/WeatherMoodChart';
 import WeatherMoodChartInteractive from '@/components/WeatherMoodChartInteractive';
 import generateDateRange from '@/lib/generateDateRange';
 import Footer from '@/components/ui/footer';
 import PageTitle from '@/components/ui/page-title';
+import ArticleCard from '@/components/ArticleCard';
 const weatherCategories = weatherOptions;
 
 export interface AggregatedDataWeather {
@@ -18,7 +25,11 @@ export interface AggregatedDataWeather {
   'Very good': number;
 }
 
-const WeatherPage = () => {
+
+const WeatherPage: React.FC<PageProps> = ({
+  onArticleCategoryClicked,
+  setCurrentPage,
+}) => {
   const [chartData, setChartData] = React.useState<AggregatedDataWeather[]>([]);
   const [weekChartData, setWeekChartData] = React.useState<
     AggregatedDataWeather[]
@@ -113,6 +124,10 @@ const WeatherPage = () => {
     getMoodData();
   }, []);
 
+  const weatherData = articlesData.find(
+    (article) => article.title === 'Mood and Weather 🌪'
+  );
+
   return (
     <div className='flex flex-col items-center gap-10'>
       <PageTitle title='Mood Based on Weather Conditions' />
@@ -130,6 +145,20 @@ const WeatherPage = () => {
         weather7={averageWeatherDataWeek}
         weather30={averageWeatherDataMonth}
       />
+      {weatherData && (
+        <>
+          <div className='-mt-8'>
+            <PageTitle title='Need more information? Explore!' />
+          </div>
+          <ArticleCard
+            title={weatherData.title}
+            description={weatherData.description}
+            articles={weatherData.articles}
+            onArticleCategoryClicked={onArticleCategoryClicked}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
       <Footer />
     </div>
   );

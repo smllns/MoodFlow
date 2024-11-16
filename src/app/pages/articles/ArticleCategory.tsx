@@ -21,7 +21,7 @@ const ArticleCategory: React.FC<ArticleCategoryProps> = ({
   onArticleClicked,
 }) => {
   return (
-    <div>
+    <div >
       <PageTitle title={title} />
       {articles.map((article, index) => (
         <ArticleCardLittle

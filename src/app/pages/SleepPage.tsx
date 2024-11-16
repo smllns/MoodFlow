@@ -4,9 +4,10 @@ import { fetchAllMoodData } from '../functions/authService';
 import SleepMoodChart from '@/components/SleepMoodChart';
 import SleepMoodChartInteractive from '@/components/SleepMoodChartInteractive';
 import generateDateRange from '@/lib/generateDateRange';
-import { MoodDataItem, MoodType } from '@/lib/constants';
+import { articlesData, MoodDataItem, MoodType, PageProps } from '@/lib/constants';
 import Footer from '@/components/ui/footer';
 import PageTitle from '@/components/ui/page-title';
+import ArticleCard from '@/components/ArticleCard';
 const sleepCategories = ['<6 h', '7 h', '8 h', '9 h', '>10 h'];
 
 interface AggregatedResult {
@@ -22,7 +23,12 @@ export interface AggregatedData {
   'Very good': number;
 }
 
-const SleepPage = () => {
+
+
+const SleepPage: React.FC<PageProps> = ({
+  onArticleCategoryClicked,
+  setCurrentPage,
+}) => {
   const [chartData, setChartData] = React.useState<AggregatedData[]>([]);
   const [weekChartData, setWeekChartData] = React.useState<AggregatedData[]>(
     []
@@ -119,6 +125,10 @@ const SleepPage = () => {
     getMoodData();
   }, []);
 
+  const sleepData = articlesData.find(
+    (article) => article.title === 'Mood and Sleep 💤'
+  );
+
   return (
     <div className='flex flex-col items-center gap-10'>
       <PageTitle title='Mood Based on Sleep Duration' />
@@ -136,6 +146,20 @@ const SleepPage = () => {
         sleep7={averageSleepDataWeek}
         sleep30={averageSleepDataMonth}
       />
+      {sleepData && (
+        <>
+          <div className='-mt-8'>
+            <PageTitle title='Need more information? Explore!' />
+          </div>
+          <ArticleCard
+            title={sleepData.title}
+            description={sleepData.description}
+            articles={sleepData.articles}
+            onArticleCategoryClicked={onArticleCategoryClicked}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
       <Footer />
     </div>
   );

@@ -4,9 +4,16 @@ import { fetchAllMoodData } from '../functions/authService';
 import FactorsMoodChart from '@/components/FactorsMoodChart';
 import FactorsMoodChartInteractive from '@/components/FactorsMoodChartInteractive';
 import generateDateRange from '@/lib/generateDateRange';
-import { monthNames, MoodDataItem, MoodType } from '@/lib/constants';
+import {
+  articlesData,
+  monthNames,
+  MoodDataItem,
+  MoodType,
+  PageProps,
+} from '@/lib/constants';
 import Footer from '@/components/ui/footer';
 import PageTitle from '@/components/ui/page-title';
+import ArticleCard from '@/components/ArticleCard';
 
 export interface AggregatedDataFactors {
   month: string;
@@ -22,7 +29,10 @@ const moodLabels = {
   'Very good': 5,
 };
 
-const FactorsPage = () => {
+const FactorsPage: React.FC<PageProps> = ({
+  onArticleCategoryClicked,
+  setCurrentPage,
+}) => {
   const [chartData, setChartData] = React.useState<AggregatedDataFactors[]>([]);
   const [weekChartData, setWeekChartData] = React.useState<
     AggregatedDataFactors[]
@@ -80,6 +90,10 @@ const FactorsPage = () => {
     getMoodData();
   }, []);
 
+  const factorsData = articlesData.find(
+    (article) => article.title === 'Mood and Factors 🌈'
+  );
+
   return (
     <div className='flex flex-col items-center gap-10'>
       <PageTitle title='Mood Based on Factors' />
@@ -89,6 +103,20 @@ const FactorsPage = () => {
         monthChartData={monthChartData}
         loading={loading}
       />
+      {factorsData && (
+        <>
+          <div className='-mt-8'>
+            <PageTitle title='Need more information? Explore!' />
+          </div>
+          <ArticleCard
+            title={factorsData.title}
+            description={factorsData.description}
+            articles={factorsData.articles}
+            onArticleCategoryClicked={onArticleCategoryClicked}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
       <Footer />
     </div>
   );

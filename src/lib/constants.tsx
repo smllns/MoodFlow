@@ -1,7 +1,11 @@
 'use client';
 
+//info for main part of the app
 import { ChartConfig } from '@/components/ui/chart';
-
+export interface PageProps {
+  onArticleCategoryClicked: (articleCategoryName: string) => void;
+  setCurrentPage: (currentPage: string) => void;
+}
 type Mood =
   | 'Very bad'
   | 'Slightly bad'
@@ -97,6 +101,8 @@ export const chartConfig = {
   verygood: { color: 'var(--chart-5)', label: 'Very good' },
 } satisfies ChartConfig;
 
+//info for articles part of the app
+
 export const articlesData = [
   {
     title: 'Mood and Daily Patterns 🧶',
@@ -144,7 +150,7 @@ export const articlesData = [
   },
 ];
 
-export const moodArticles = [
+export const moodArticles: Article[] = [
   {
     title: 'Why You Often Feel Low in the Afternoon 🦦',
     description:
@@ -167,7 +173,7 @@ export const moodArticles = [
   },
 ];
 
-export const weatherArticles = [
+export const weatherArticles: Article[] = [
   {
     title: 'Why Rainy Days Make You Feel Sad 🌧',
     description:
@@ -190,7 +196,7 @@ export const weatherArticles = [
   },
 ];
 
-export const sleepArticles = [
+export const sleepArticles: Article[] = [
   {
     title: 'How Sleep Impacts Your Mood 🪼',
     description:
@@ -213,7 +219,7 @@ export const sleepArticles = [
   },
 ];
 
-export const factorsArticles = [
+export const factorsArticles: Article[] = [
   {
     title: 'The Impact of Family Time on Your Mood 👵🏼',
     description:
@@ -235,6 +241,17 @@ export const factorsArticles = [
       'Understand how being outdoors and connecting with nature can enhance your mood and overall mental health.',
   },
 ];
+interface Article {
+  title: string;
+  description: string;
+}
+
+export const categories: Record<string, Article[]> = {
+  'Mood and Daily Patterns 🧶': moodArticles,
+  'Mood and Weather 🌪': weatherArticles,
+  'Mood and Sleep 💤': sleepArticles,
+  'Mood and Factors 🌈': factorsArticles,
+};
 
 export const WhyYouOftenFeelLowInTheAfternoon = {
   title: 'Why You Often Feel Low in the Afternoon',
@@ -674,4 +691,92 @@ export const NatureMentalBenefits = {
   
     <h3 class="text-2xl font-semibold text-center pb-5">Conclusion</h3>
     <p class="text-base mb-4">Spending time in nature is a simple yet powerful way to boost mental health and well-being. Whether it’s for reducing stress, boosting mood, enhancing cognitive function, or promoting healing, nature offers a range of benefits that can help improve your mental state. Incorporating outdoor time into your daily routine can contribute to a healthier and happier life.</p>`,
+};
+
+type ArticleContent = {
+  title: string;
+  description: string;
+  content: string;
+};
+export const articleData: Record<string, ArticleContent> = {
+  'Why You Often Feel Low in the Afternoon 🦦': {
+    title: WhyYouOftenFeelLowInTheAfternoon.title,
+    description: WhyYouOftenFeelLowInTheAfternoon.description,
+    content: WhyYouOftenFeelLowInTheAfternoon.content,
+  },
+  'Simple Ways to Boost Your Mood Fast 💖': {
+    title: SimpleWaysToBoostYourMoodFast.title,
+    description: SimpleWaysToBoostYourMoodFast.description,
+    content: SimpleWaysToBoostYourMoodFast.content,
+  },
+  'The Science Behind Feeling Great in the Morning 🌞': {
+    title: TheScienceBehindFeelingGreatInTheMorning.title,
+    description: TheScienceBehindFeelingGreatInTheMorning.description,
+    content: TheScienceBehindFeelingGreatInTheMorning.content,
+  },
+  'Tracking Mood Swings Throughout Your Day 🎢': {
+    title: TrackingMoodSwingsThroughoutYourDay.title,
+    description: TrackingMoodSwingsThroughoutYourDay.description,
+    content: TrackingMoodSwingsThroughoutYourDay.content,
+  },
+  'Why Rainy Days Make You Feel Sad 🌧': {
+    title: WhyRainyDaysMakeYouFeelSad.title,
+    description: WhyRainyDaysMakeYouFeelSad.description,
+    content: WhyRainyDaysMakeYouFeelSad.content,
+  },
+  'How Sunshine Lifts Your Spirits 🐣': {
+    title: HowSunshineLiftsYourSpirits.title,
+    description: HowSunshineLiftsYourSpirits.description,
+    content: HowSunshineLiftsYourSpirits.content,
+  },
+  'Weather and Productivity: Surprising Links 🦔': {
+    title: WeatherAndProductivity.title,
+    description: WeatherAndProductivity.description,
+    content: WeatherAndProductivity.content,
+  },
+  'Preparing Emotionally for Seasonal Changes 🍂': {
+    title: PreparingEmotionallyForSeasonalChanges.title,
+    description: PreparingEmotionallyForSeasonalChanges.description,
+    content: PreparingEmotionallyForSeasonalChanges.content,
+  },
+  'How Sleep Impacts Your Mood 🪼': {
+    title: HowSleepImpactsYourMood.title,
+    description: HowSleepImpactsYourMood.description,
+    content: HowSleepImpactsYourMood.content,
+  },
+  'Ways to Improve Your Sleep for Better Mental Health 🧘🏼‍♀️': {
+    title: WaysToImproveYourSleep.title,
+    description: WaysToImproveYourSleep.description,
+    content: WaysToImproveYourSleep.content,
+  },
+  'The Role of Sleep Cycles in Emotional Stability 🕯': {
+    title: TheRoleOfSleepCycles.title,
+    description: TheRoleOfSleepCycles.description,
+    content: TheRoleOfSleepCycles.content,
+  },
+  "Night Owls vs. Early Birds: Who's Happier? 🌝": {
+    title: NightOwlsVsEarlyBirds.title,
+    description: NightOwlsVsEarlyBirds.description,
+    content: NightOwlsVsEarlyBirds.content,
+  },
+  'The Impact of Family Time on Your Mood 👵🏼': {
+    title: FamilyTimeImpact.title,
+    description: FamilyTimeImpact.description,
+    content: FamilyTimeImpact.content,
+  },
+  'Why Fitness Is Key to Emotional Balance 🏄🏻‍♀️': {
+    title: FitnessAndEmotionalBalance.title,
+    description: FitnessAndEmotionalBalance.description,
+    content: FitnessAndEmotionalBalance.content,
+  },
+  'Managing Work Stress to Stay Happy 👩🏻‍💻': {
+    title: WorkStressManagement.title,
+    description: WorkStressManagement.description,
+    content: WorkStressManagement.content,
+  },
+  'The Mental Benefits of Spending Time in Nature 🌱': {
+    title: NatureMentalBenefits.title,
+    description: NatureMentalBenefits.description,
+    content: NatureMentalBenefits.content,
+  },
 };

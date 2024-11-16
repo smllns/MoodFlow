@@ -4,17 +4,26 @@ import { fetchAllMoodData } from '../functions/authService';
 import YearlyMoodPieChart from '@/components/YearlyMoodPieChart';
 import generateDateRange from '@/lib/generateDateRange';
 import MonthlyMoodChart from '@/components/MonthlyMoodChart';
-import { MoodDataItem, MoodType } from '@/lib/constants';
+import {
+  articlesData,
+  MoodDataItem,
+  MoodType,
+  PageProps,
+} from '@/lib/constants';
 import Footer from '@/components/ui/footer';
 import PageTitle from '@/components/ui/page-title';
 import { DataTable } from '@/components/DataTable';
+import ArticleCard from '@/components/ArticleCard';
 
 export interface AggregatedDataMood {
   mood: string;
   count: number;
 }
 
-const FullStatsPage = () => {
+const FullStatsPage: React.FC<PageProps> = ({
+  onArticleCategoryClicked,
+  setCurrentPage,
+}) => {
   const [allData, setAllData] = React.useState<MoodDataItem[]>([]);
   const [chartData, setChartData] = React.useState<AggregatedDataMood[]>([]);
   const [weekChartData, setWeekChartData] = React.useState<
@@ -137,7 +146,9 @@ const FullStatsPage = () => {
 
     getMoodData();
   }, []);
-
+  const moodInfoData = articlesData.find(
+    (article) => article.title === 'Mood and Daily Patterns 🧶'
+  );
   return (
     <div className='flex flex-col items-center gap-10'>
       <PageTitle title='Mood Statistics' />
@@ -174,7 +185,24 @@ const FullStatsPage = () => {
         />
       </div>
       <MonthlyMoodChart chartData={allData} loading={loading} />
-      <PageTitle title='Your Full Mood Data' />
+      {moodInfoData && (
+        <>
+          <div className='-mt-8'>
+            <PageTitle title='Need more information? Explore!' />
+          </div>
+          <ArticleCard
+            title={moodInfoData.title}
+            description={moodInfoData.description}
+            articles={moodInfoData.articles}
+            onArticleCategoryClicked={onArticleCategoryClicked}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
+      <div className='-mt-8'>
+        <PageTitle title='Your Full Mood Data' />
+      </div>
+
       <DataTable data={allData} />
       <Footer />
     </div>
