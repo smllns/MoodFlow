@@ -199,7 +199,8 @@ const FullStatsPage: React.FC<PageProps> = ({
           />
         </>
       )}
-      <div className='-mt-8'>
+      
+      <div className='-mt-8 -mb-4'>
         <PageTitle title='Your Full Mood Data' />
       </div>
 
