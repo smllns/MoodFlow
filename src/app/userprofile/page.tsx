@@ -30,6 +30,7 @@ import WeatherPage from '../pages/WeatherPage';
 import FactorsPage from '../pages/FactorsPage';
 import FullStatsPage from '../pages/FullStatsPage';
 import ArticlesPage from '../pages/ArticlesPage';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function Page() {
   const [userName, setUserName] = useState<string>('User');
@@ -142,12 +143,11 @@ export default function Page() {
 
     return () => unsubscribe();
   }, []);
-
+  
+  // Show loading indicator while data is being loaded
   if (loading) {
     return (
-      <div className='flex items-center justify-center h-screen bg-[#e6f0ff] dark:bg-[#18181b]'>
-        <Image width='100' height='100' src='/loading.gif' alt='Loading...' />
-      </div>
+      <LoadingSpinner containerClassName='h-screen bg-[#e6f0ff] dark:bg-[#18181b]' />
     );
   }
 

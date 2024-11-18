@@ -1,3 +1,4 @@
+//article page
 'use client';
 import React from 'react';
 import PageTitle from './ui/page-title';
@@ -8,10 +9,9 @@ interface ArticleProps {
   content: string;
 }
 const Article: React.FC<ArticleProps> = ({ title, description, content }) => {
+  //function for printing an article in a custom template
   const printContent = () => {
     const printWindow = window.open('', '', 'height=500, width=800');
-
-    // Create a copy of the content and remove background styles
     const contentToPrint = document.createElement('div');
     contentToPrint.innerHTML = `
     <div class="min-h-screen flex flex-col">
@@ -23,11 +23,7 @@ const Article: React.FC<ArticleProps> = ({ title, description, content }) => {
       <p class="mt-auto text-center text-sm">© 2024 All rights reserved by smllns</p>
     </div>
   `;
-
-    // Inject the new content into the print window
     printWindow?.document.body.appendChild(contentToPrint);
-
-    // Style the document for printing (remove backgrounds)
     const style = printWindow?.document.createElement('style');
     if (style) {
       style.innerHTML = `
@@ -51,8 +47,6 @@ const Article: React.FC<ArticleProps> = ({ title, description, content }) => {
       `;
       printWindow?.document.head.appendChild(style);
     }
-
-    // Trigger the print dialog
     printWindow?.print();
     printWindow?.close();
   };

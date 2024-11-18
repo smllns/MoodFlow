@@ -1,3 +1,4 @@
+//reusable mood of the day setter/information display
 'use client';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -12,6 +13,7 @@ import TodayMoodStep from './TodayMoodStep';
 import { moodIcons } from '@/lib/constants';
 import { saveMoodData } from '@/app/functions/authService';
 import FullMoodInfoStep from './FullMoodInfoStep';
+
 interface MoodOfTheDayProps {
   onDateChange: () => void;
   selectedDate: string;
@@ -36,15 +38,20 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
   const [weather, setWeather] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
+  // Initializing react-hook-form with validation using Zod schema
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: { factors: [] },
   });
 
+  // Function to move to the next step
   const handleNext = () => setStep(step + 1);
+  // Function to move to the previous step
   const handlePrevious = () => setStep(Math.max(step - 1, 1));
+  // Function to toggle the full information view
   const handleFullInfo = () => setFullInfo(!fullInfo);
 
+  // Function to handle saving mood data
   const handleSave = async () => {
     const currentDate = selectedDate;
     try {
@@ -55,6 +62,7 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
         weather,
         currentDate
       );
+      // Reset form and state on successful save
       onDateChange();
       setStep(1);
       setSliderValue(50);
@@ -69,6 +77,7 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
     }
   };
 
+  // Function to get the mood description based on the slider value
   const getMood = () => {
     if (sliderValue <= 20) return 'Very bad';
     if (sliderValue <= 40) return 'Slightly bad';
@@ -77,11 +86,33 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
     return 'Very good';
   };
 
+  // Get selected mood and corresponding icon
   const selectedMood = getMood();
   const moodIcon = moodIcons[selectedMood];
 
+  // Array of steps for the mood tracking process.
+  const steps = [
+    { component: TodayMoodStep, condition: !fullInfo },
+    { component: MoodSliderStep },
+    { component: FactorsStep },
+    { component: SleepStep },
+    { component: WeatherStep },
+  ];
+
+  // Default setStep function to avoid undefined issue
+  const defaultSetStep = (step: number) => {};
+
+  // Helper function to get card classes based on the fullInfo state
+  const getCardClasses = (fullInfo: boolean) =>
+    `mx-auto p-5 ${
+      fullInfo
+        ? 'h-fit xxs:w-[275px] xs:w-[380px]'
+        : 'h-[420px] xxs:w-[275px] xs:w-[335px]'
+    } flex items-center justify-center bg-gray-100/50 dark:bg-neutral-800/50`;
+
   return (
     <div className='flex flex-col items-center justify-center x0:h-[95vh] lg:h-fit'>
+      {/* Render title based on whether the full information view is active */}
       {!isCalendar &&
         (!fullInfo ? (
           <h1 className='text-2xl font-bold x0:pb-2 lg:pt-8 lg:pb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
@@ -92,7 +123,8 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
             A Deep Dive into Your Mood
           </h1>
         ))}
-      <Card
+      {/* Main card component that wraps the different steps */}
+      {/* <Card
         className={`mx-auto p-5 ${
           fullInfo
             ? 'h-fit xxs:w-[275px] xs:w-[380px]'
@@ -160,6 +192,43 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
             onSave={handleSave}
             onPrevious={handlePrevious}
           />
+        )}
+      </Card> */}
+
+      <Card className={getCardClasses(fullInfo)}>
+        {fullInfo ? (
+          <FullMoodInfoStep
+            sliderValue={sliderValue}
+            onGetFullInfo={handleFullInfo}
+            selectedDate={selectedDate}
+          />
+        ) : (
+          steps.map(({ component: StepComponent }, index) => {
+            if (step !== index + 1) return null;
+            return (
+              <StepComponent
+                key={index}
+                sliderValue={sliderValue}
+                setSliderValue={setSliderValue}
+                selectedMood={selectedMood}
+                moodIcon={moodIcon}
+                selectedDate={selectedDate}
+                onNext={handleNext}
+                onPrevious={handlePrevious}
+                onGetFullInfo={handleFullInfo}
+                step={step || 1}
+                setStep={setStep || defaultSetStep}
+                selectedFactors={selectedFactors}
+                setSelectedFactors={setSelectedFactors}
+                form={form}
+                hoursOfSleep={hoursOfSleep}
+                setHoursOfSleep={setHoursOfSleep}
+                weather={weather}
+                setWeather={setWeather}
+                onSave={handleSave}
+              />
+            );
+          })
         )}
       </Card>
     </div>

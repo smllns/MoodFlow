@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from './ui/select';
 import { chartConfig } from '@/lib/constants';
+import LoadingSpinner from './LoadingSpinner';
 interface YearlyMoodPieChartProps {
   chartData1: AggregatedDataMood[];
   chartData2: AggregatedDataMood[];
@@ -88,11 +89,10 @@ const YearlyMoodPieChart: React.FC<YearlyMoodPieChartProps> = ({
     percentage: parseFloat(((entry.count / totalCount) * 100).toFixed(0)), // rounded and removes trailing .0
   }));
 
+  // Show loading indicator while data is being loaded
   if (loading) {
     return (
-      <Card className='bg-gray-100/50 dark:bg-neutral-800/50 flex items-center justify-center w-[290px] h-[290px]'>
-        <Image width='100' height='100' src='/loading.gif' alt='Loading...' />
-      </Card>
+      <LoadingSpinner containerClassName='bg-gray-100/50 dark:bg-neutral-800/50 flex items-center justify-center w-[290px] h-[290px]' />
     );
   }
 

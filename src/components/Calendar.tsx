@@ -1,5 +1,5 @@
+//calendar settings
 'use client';
-
 import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { fetchAllMoodData } from '@/app/functions/authService';
 import { moodIcons } from '@/lib/constants';
-import Image from 'next/image';
 import { Drawer, DrawerTrigger } from '@/components/ui/drawer';
 import DrawerComponent from './DrawerComponent';
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+import LoadingSpinner from './LoadingSpinner';
+type CalendarProps = React.ComponentProps<typeof DayPicker>;
 interface MoodData {
   date: string;
   data: {
@@ -26,6 +26,7 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  // State hooks for managing mood data, loading state, selected date, etc.
   const [moodData, setMoodData] = React.useState<MoodData[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [selectedDate, setSelectedDate] = React.useState(
@@ -34,9 +35,13 @@ function Calendar({
   const [refreshDataTrigger, setRefreshDataTrigger] = React.useState(false);
   const [fullInfo, setFullInfo] = React.useState<boolean>(false);
   const [step, setStep] = React.useState<number>(1);
+
+  // Function to trigger data refresh
   const handleRefreshData = () => {
     setRefreshDataTrigger((prev) => !prev);
   };
+
+  // Fetch mood data when the component mounts or refreshDataTrigger changes
   React.useEffect(() => {
     const getMoodData = async () => {
       setLoading(true);
@@ -44,10 +49,10 @@ function Calendar({
       setMoodData(data);
       setLoading(false);
     };
-
     getMoodData();
   }, [refreshDataTrigger]);
 
+  // Function to get the mood icon for a specific date
   const getMoodIconForDate = React.useCallback(
     (day: Date) => {
       const formattedDate = day.toLocaleDateString('en-CA');
@@ -59,11 +64,14 @@ function Calendar({
     [moodData]
   );
 
+  // Function to handle day click events in the calendar
   const handleDayClick = (date: Date) => {
     setStep(1);
     setFullInfo(false);
     setSelectedDate(date.toLocaleDateString('en-CA'));
   };
+
+  // Custom rendering of calendar days with mood icons
   const CustomDay = (props: any) => {
     const { date, ...dayProps } = props;
     const moodIcon = getMoodIconForDate(date);
@@ -87,12 +95,9 @@ function Calendar({
     );
   };
 
+  // Show loading indicator while data is being loaded
   if (loading) {
-    return (
-      <div className='flex items-center justify-center h-full'>
-        <Image width='100' height='100' src='/loading.gif' alt='Loading...' />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
@@ -143,6 +148,8 @@ function Calendar({
         }}
         {...props}
       />
+
+      {/* DrawerComponent to show mood details for the selected date */}
       <DrawerComponent
         selectedDate={selectedDate}
         handleRefreshData={handleRefreshData}

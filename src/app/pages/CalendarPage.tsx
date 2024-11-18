@@ -1,13 +1,12 @@
+//calendar page opened from sidebar
 'use client';
-
+import React from 'react';
 import { Calendar } from '@/components/Calendar';
 import Footer from '@/components/ui/footer';
 import PageTitle from '@/components/ui/page-title';
-import React, { useState } from 'react';
 
 const CalendarPage = () => {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
-
   return (
     <div className='flex flex-col items-center justify-between h-[90vh] '>
       <PageTitle title='Mood Calendar' />

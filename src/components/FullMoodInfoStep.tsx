@@ -7,6 +7,7 @@ import { moodIcons } from '@/lib/constants';
 import { Button } from './ui/button';
 import Image from 'next/image';
 import formatDate from '@/lib/formatDate';
+import LoadingSpinner from './LoadingSpinner';
 interface MoodData {
   mood: keyof typeof moodIcons;
   factors: string[];
@@ -40,12 +41,9 @@ const FullMoodInfoStep: React.FC<FullMoodInfoStep> = ({
     handleFetchMood(selectedDate);
   }, [selectedDate]);
 
+  // Show loading indicator while data is being loaded
   if (loading) {
-    return (
-      <div className='flex items-center justify-center h-full'>
-        <Image width='100' height='100' src='/loading.gif' alt='Loading...' />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
   return (
     <div className='text-center  flex flex-col justify-between items-center h-full'>

@@ -1,3 +1,4 @@
+//drawer component opened when user clicks on a day on calendar component
 'use client';
 import React from 'react';
 import { DrawerContent } from '@/components/ui/drawer';
@@ -11,6 +12,7 @@ interface DrawerComponentProps {
   step: number;
   setStep: (step: number) => void;
 }
+
 const DrawerComponent: React.FC<DrawerComponentProps> = ({
   selectedDate,
   handleRefreshData,

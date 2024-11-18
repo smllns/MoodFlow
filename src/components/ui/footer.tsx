@@ -1,3 +1,5 @@
+//helper reusable footer component
+'use client';
 import React from 'react';
 
 const Footer = () => {

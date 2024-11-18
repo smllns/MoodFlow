@@ -1,14 +1,12 @@
+// article category page
 'use client';
 import React from 'react';
 import ArticleCardLittle from '@/components/ArticleCardLittle';
-
 import PageTitle from '@/components/ui/page-title';
-
 interface Article {
   title: string;
   description: string;
 }
-
 interface ArticleCategoryProps {
   title: string;
   articles: Article[];
@@ -21,7 +19,7 @@ const ArticleCategory: React.FC<ArticleCategoryProps> = ({
   onArticleClicked,
 }) => {
   return (
-    <div >
+    <div>
       <PageTitle title={title} />
       {articles.map((article, index) => (
         <ArticleCardLittle

@@ -1,3 +1,4 @@
+//page with articles opened from sidebar
 'use client';
 import React from 'react';
 import ArticleCard from '@/components/ArticleCard';
@@ -22,6 +23,7 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({
   article,
   setCurrentPage,
 }) => {
+  //function for rendering articles
   const renderArticle = () => {
     const data = articleData[article];
     if (data) {
@@ -35,9 +37,10 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({
     }
     return null;
   };
+
+  //function for rendering article categories
   const renderCategory = () => {
     const articles = categories[articleCategory];
-
     if (articles) {
       return (
         <ArticleCategory

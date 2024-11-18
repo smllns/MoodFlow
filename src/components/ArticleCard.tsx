@@ -1,3 +1,4 @@
+//article category card function
 'use client';
 import React from 'react';
 import {

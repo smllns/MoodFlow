@@ -18,7 +18,7 @@ import { CartesianGrid, BarChart, Bar, XAxis } from 'recharts';
 import Image from 'next/image';
 import { AggregatedDataWeather } from '@/app/pages/WeatherPage';
 import { chartConfig } from '@/lib/constants';
-
+import LoadingSpinner from './LoadingSpinner';
 
 interface WeatherMoodChartProps {
   chartData: AggregatedDataWeather[];
@@ -27,21 +27,19 @@ interface WeatherMoodChartProps {
   weather: string | undefined;
 }
 
-
 const WeatherMoodChart: React.FC<WeatherMoodChartProps> = ({
   chartData,
   info,
   loading,
   weather,
 }) => {
+  // Show loading indicator while data is being loaded
   if (loading) {
     return (
-      <Card className='bg-gray-100/50 dark:bg-neutral-800/50 flex items-center justify-center x0:w-[288px] x0:h-[347px] xs:w-[449px] xs:h-[406px] sm:w-[545px] sm:h-[428px] md:w-[432px] md:h-[396px] lg:w-[545px] lg:h-[428x]'>
-        <Image width='100' height='100' src='/loading.gif' alt='Loading...' />
-      </Card>
+      <LoadingSpinner containerClassName='bg-gray-100/50 dark:bg-neutral-800/50 flex items-center justify-center x0:w-[288px] x0:h-[347px] xs:w-[449px] xs:h-[406px] sm:w-[545px] sm:h-[428px] md:w-[432px] md:h-[396px] lg:w-[545px] lg:h-[428x]' />
     );
   }
-  console.log(chartData);
+
   return (
     <Card className='bg-gray-100/50 dark:bg-neutral-800/50'>
       <CardHeader>
