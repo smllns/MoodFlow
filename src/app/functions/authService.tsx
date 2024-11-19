@@ -13,6 +13,7 @@ import {
   createUserWithEmailAndPassword,
   deleteUser,
   EmailAuthProvider,
+  onAuthStateChanged,
   reauthenticateWithCredential,
   signInWithEmailAndPassword,
   updateEmail,
@@ -250,4 +251,36 @@ export const updateUserPassword = async (
     console.error('Error updating email:', error);
     throw error;
   }
+};
+
+//checking user authentication status+displaying user name
+export const checkAuthState = (
+  setUserName: React.Dispatch<React.SetStateAction<string>>,
+  setError: React.Dispatch<React.SetStateAction<string | null>>,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    if (currentUser) {
+      try {
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          setUserName(userDoc.data()?.name);
+        } else {
+          setError('User not found in Firestore.');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setError('Failed to load user data.');
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setError('No user is currently logged in. 👀');
+      setLoading(false);
+    }
+  });
+
+  return unsubscribe;
 };

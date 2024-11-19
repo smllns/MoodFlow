@@ -1,3 +1,4 @@
+//main page visible when user is logged in
 'use client';
 import { AppSidebar } from '@/components/AppSidebar';
 import {
@@ -19,7 +20,6 @@ import {
 import { auth, db } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MoodOfTheDayPage from '../pages/MoodOfTheDayPage';
@@ -31,21 +31,25 @@ import FactorsPage from '../pages/FactorsPage';
 import FullStatsPage from '../pages/FullStatsPage';
 import ArticlesPage from '../pages/ArticlesPage';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { checkAuthState } from '../functions/authService';
 
 export default function Page() {
   const [userName, setUserName] = useState<string>('User');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
-  const [currentPage, setCurrentPage] = useState('currmood'); // Начальная страница
-  const [isArticles, setIsArticles] = useState(''); // Начальная страница
-  const [article, setArticle] = useState(''); // Начальная страница
+  const [currentPage, setCurrentPage] = useState('currmood');
+  const [isArticles, setIsArticles] = useState('');
+  const [article, setArticle] = useState('');
+
+  // Function to handle page changes by resetting related states
   const handlePageChange = (page: string) => {
     setIsArticles('');
     setArticle('');
-    setCurrentPage(page); // Меняем текущую страницу
+    setCurrentPage(page);
   };
 
+  // Function to render the appropriate content based on the current page
   const renderContent = () => {
     switch (currentPage) {
       case 'currmood':
@@ -103,6 +107,8 @@ export default function Page() {
         return <MoodOfTheDayPage />;
     }
   };
+
+  // Function to get the title for the current page
   const getTitleFromPage = (page: string) => {
     const titles: { [key: string]: string } = {
       currmood: 'Mood of the day',
@@ -117,43 +123,56 @@ export default function Page() {
     return titles[page] || 'Mood of the day';
   };
 
+  // // useEffect hook to check user authentication status
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+  //     if (currentUser) {
+  //       try {
+  //         const userDocRef = doc(db, 'users', currentUser.uid);
+  //         const userDoc = await getDoc(userDocRef);
+
+  //         if (userDoc.exists()) {
+  //           setUserName(userDoc.data()?.name);
+  //         } else {
+  //           setError('User not found in Firestore.');
+  //         }
+  //       } catch (error) {
+  //         console.error('Error fetching user data:', error);
+  //         setError('Failed to load user data.');
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     } else {
+  //       setError('No user is currently logged in. 👀');
+  //       setLoading(false);
+  //     }
+  //   });
+
+  //   return () => unsubscribe();
+  // }, []);
+
+  // Use the checkAuthState function to handle authentication
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        try {
-          const userDocRef = doc(db, 'users', currentUser.uid);
-          const userDoc = await getDoc(userDocRef);
+    const unsubscribe = checkAuthState(
+      setUserName,
+      setError,
+      setLoading,
+    );
 
-          if (userDoc.exists()) {
-            setUserName(userDoc.data()?.name);
-          } else {
-            setError('User not found in Firestore.');
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-          setError('Failed to load user data.');
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setError('No user is currently logged in. 👀');
-        setLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
+    return () => unsubscribe(); // Clean up the auth listener when the component unmounts
   }, []);
-  
+
   // Show loading indicator while data is being loaded
   if (loading) {
     return (
-      <LoadingSpinner containerClassName='h-screen bg-[#e6f0ff] dark:bg-[#18181b]' />
+      <LoadingSpinner containerClassName='h-screen flex justify-center items-center' />
     );
   }
 
+  // Show error if any error occurred during authentication or data fetching
   if (error) {
     return (
-      <div className='flex flex-col h-screen justify-center items-center bg-[#18181b]'>
+      <div className='flex flex-col h-screen justify-center items-center '>
         <div className='text-red-500'>{error}</div>
         <Button className='mt-4' onClick={() => router.push('/')}>
           Back to Homepage

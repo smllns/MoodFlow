@@ -25,41 +25,23 @@ const FullStatsPage: React.FC<PageProps> = ({
   onArticleCategoryClicked,
   setCurrentPage,
 }) => {
-  // State variables for storing chart data and loading state
-  const [allData, setAllData] = React.useState<MoodDataItem[]>([]);
-  const [chartData, setChartData] = React.useState<AggregatedDataMood[]>([]);
-  const [weekChartData, setWeekChartData] = React.useState<
-    AggregatedDataMood[]
-  >([]);
-  const [twoWeekChartData, setTwoWeekChartData] = React.useState<
-    AggregatedDataMood[]
-  >([]);
-  const [monthChartData, setMonthChartData] = React.useState<
-    AggregatedDataMood[]
-  >([]);
-  const [threeMonthChartData, setThreeMonthChartData] = React.useState<
-    AggregatedDataMood[]
-  >([]);
-  const [halfYearChartData, setHalfYearChartData] = React.useState<
-    AggregatedDataMood[]
-  >([]);
-  const [mostFrequentMood, setMostFrequentMood] = React.useState<
-    string | undefined
-  >();
-  const [mostFrequentMoodWeek, setMostFrequentMoodWeek] = React.useState<
-    string | undefined
-  >();
-  const [mostFrequentMoodTwoWeek, setMostFrequentMoodTwoWeek] = React.useState<
-    string | undefined
-  >();
-  const [mostFrequentMoodMonth, setMostFrequentMoodMonth] = React.useState<
-    string | undefined
-  >();
-  const [mostFrequentMoodThreeMonth, setMostFrequentMoodThreeMonth] =
-    React.useState<string | undefined>();
-  const [mostFrequentMoodHalfYear, setMostFrequentMoodHalfYear] =
-    React.useState<string | undefined>();
-  const [loading, setLoading] = React.useState(true);
+  // Consolidated state object for all chart data and mood stats
+  const [moodStats, setMoodStats] = React.useState({
+    allData: [] as MoodDataItem[],
+    chartData: [] as AggregatedDataMood[],
+    weekChartData: [] as AggregatedDataMood[],
+    twoWeekChartData: [] as AggregatedDataMood[],
+    monthChartData: [] as AggregatedDataMood[],
+    threeMonthChartData: [] as AggregatedDataMood[],
+    halfYearChartData: [] as AggregatedDataMood[],
+    mostFrequentMood: undefined as string | undefined,
+    mostFrequentMoodWeek: undefined as string | undefined,
+    mostFrequentMoodTwoWeek: undefined as string | undefined,
+    mostFrequentMoodMonth: undefined as string | undefined,
+    mostFrequentMoodThreeMonth: undefined as string | undefined,
+    mostFrequentMoodHalfYear: undefined as string | undefined,
+    loading: true,
+  });
 
   // Memoized values for different date ranges
   const weekDays = useMemo(() => generateDateRange(7), []);
@@ -112,7 +94,7 @@ const FullStatsPage: React.FC<PageProps> = ({
   // Fetching data on component mount and setting chart data
   React.useEffect(() => {
     const getMoodData = async () => {
-      setLoading(true);
+      setMoodStats((prevState) => ({ ...prevState, loading: true }));
 
       const data = await fetchAllMoodData();
       const allData = aggregateData(data, []);
@@ -122,33 +104,34 @@ const FullStatsPage: React.FC<PageProps> = ({
       const threeMonthData = aggregateData(data, threeMonthDays);
       const halfYearData = aggregateData(data, halfYearDays);
 
-      setAllData(data);
+      setMoodStats({
+        allData: data,
+        chartData: Object.values(allData.aggregated),
+        mostFrequentMood: allData.mostFrequentMood,
 
-      setChartData(Object.values(allData.aggregated));
-      setMostFrequentMood(allData.mostFrequentMood);
+        weekChartData: Object.values(weekData.aggregated),
+        mostFrequentMoodWeek: weekData.mostFrequentMood,
 
-      setWeekChartData(Object.values(weekData.aggregated));
-      setMostFrequentMoodWeek(weekData.mostFrequentMood);
+        twoWeekChartData: Object.values(twoWeekData.aggregated),
+        mostFrequentMoodTwoWeek: twoWeekData.mostFrequentMood,
 
-      setTwoWeekChartData(Object.values(twoWeekData.aggregated));
-      setMostFrequentMoodTwoWeek(twoWeekData.mostFrequentMood);
+        monthChartData: Object.values(monthData.aggregated),
+        mostFrequentMoodMonth: monthData.mostFrequentMood,
 
-      setMonthChartData(Object.values(monthData.aggregated));
-      setMostFrequentMoodMonth(monthData.mostFrequentMood);
+        threeMonthChartData: Object.values(threeMonthData.aggregated),
+        mostFrequentMoodThreeMonth: threeMonthData.mostFrequentMood,
 
-      setThreeMonthChartData(Object.values(threeMonthData.aggregated));
-      setMostFrequentMoodThreeMonth(threeMonthData.mostFrequentMood);
+        halfYearChartData: Object.values(halfYearData.aggregated),
+        mostFrequentMoodHalfYear: halfYearData.mostFrequentMood,
 
-      setHalfYearChartData(Object.values(halfYearData.aggregated));
-      setMostFrequentMoodHalfYear(halfYearData.mostFrequentMood);
-
-      setLoading(false);
+        loading: false,
+      });
     };
 
     getMoodData();
   }, []);
 
-  // show articles on mood category
+  // Show articles on mood category
   const moodInfoData = articlesData.find(
     (article) => article.title === 'Mood and Daily Patterns 🧶'
   );
@@ -157,37 +140,40 @@ const FullStatsPage: React.FC<PageProps> = ({
       <PageTitle title='Mood Statistics' />
       <div className='flex gap-6 x0:flex-col lg:flex-row'>
         <YearlyMoodPieChart
-          chartData1={chartData}
-          chartData3={halfYearChartData}
-          chartData2={threeMonthChartData}
+          chartData1={moodStats.chartData}
+          chartData3={moodStats.halfYearChartData}
+          chartData2={moodStats.threeMonthChartData}
           info1='All time information'
           info2='Last 3 months information'
           info3='Last 6 months information'
           smallInfo1='All time'
           smallInfo2='3 months'
           smallInfo3='6 months'
-          loading={loading}
-          mood1={mostFrequentMood}
-          mood3={mostFrequentMoodHalfYear}
-          mood2={mostFrequentMoodThreeMonth}
+          loading={moodStats.loading}
+          mood1={moodStats.mostFrequentMood}
+          mood3={moodStats.mostFrequentMoodHalfYear}
+          mood2={moodStats.mostFrequentMoodThreeMonth}
         />
         <YearlyMoodPieChart
-          chartData1={weekChartData}
-          chartData2={twoWeekChartData}
-          chartData3={monthChartData}
+          chartData1={moodStats.weekChartData}
+          chartData2={moodStats.twoWeekChartData}
+          chartData3={moodStats.monthChartData}
           info1='Last 7 days'
           info2='Last 14 days'
           info3='Last 30 days'
           smallInfo1='7 days'
           smallInfo2='14 days'
           smallInfo3='30 days'
-          loading={loading}
-          mood1={mostFrequentMoodWeek}
-          mood3={mostFrequentMoodMonth}
-          mood2={mostFrequentMoodTwoWeek}
+          loading={moodStats.loading}
+          mood1={moodStats.mostFrequentMoodWeek}
+          mood3={moodStats.mostFrequentMoodMonth}
+          mood2={moodStats.mostFrequentMoodTwoWeek}
         />
       </div>
-      <MonthlyMoodChart chartData={allData} loading={loading} />
+      <MonthlyMoodChart
+        chartData={moodStats.allData}
+        loading={moodStats.loading}
+      />
       {moodInfoData && (
         <>
           <div className='-mt-8'>
@@ -207,7 +193,7 @@ const FullStatsPage: React.FC<PageProps> = ({
         <PageTitle title='Your Full Mood Data' />
       </div>
 
-      <DataTable data={allData} />
+      <DataTable data={moodStats.allData} />
       <Footer />
     </div>
   );
