@@ -1,5 +1,5 @@
+//Mood of the day page opened from sidebar
 'use client';
-
 import Footer from '@/components/ui/footer';
 import MoodOfTheDay from '@/components/MoodOfTheDay';
 import WeeklyStats from '@/components/WeeklyStats';
@@ -10,7 +10,6 @@ const MoodOfTheDayPage = () => {
   const [selectedDate, setSelectedDate] = useState(
     new Date().toLocaleDateString('en-CA')
   );
-
   const [fullInfo, setFullInfo] = useState<boolean>(false);
   const [step, setStep] = useState<number>(1);
 

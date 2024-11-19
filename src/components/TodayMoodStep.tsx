@@ -1,20 +1,14 @@
+// part of MoodOfTheDay Component, displaying short mood of the day info functionality
 'use client';
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-
+import React from 'react';
 import { CardContent, CardHeader, CardTitle } from './ui/card';
 import { moodIcons, moodLevels } from '@/lib/constants';
 import { Button } from './ui/button';
-import { fetchMoodData } from '@/app/functions/authService';
-import Image from 'next/image';
 import formatDate from '@/lib/formatDate';
 import LoadingSpinner from './LoadingSpinner';
-interface MoodData {
-  mood: keyof typeof moodIcons;
-  factors: string[];
-  sleep: number | string | null;
-  weather: string;
-}
+import useFetchMoodData from '@/hooks/useFetchMoodData';
+import AnimatedImage from './AnimatedImage';
+
 interface TodayMoodStep {
   sliderValue: number;
   onNext: () => void;
@@ -28,23 +22,9 @@ const TodayMoodStep: React.FC<TodayMoodStep> = ({
   onGetFullInfo,
   selectedDate,
 }) => {
-  const [loading, setLoading] = useState(true);
-
-  const [moodData, setMoodData] = useState<MoodData | null>(null);
-
+  // Function to fetch mood data based on the selected date
+  const { moodData, loading } = useFetchMoodData(selectedDate); // Use the custom hook
   const formattedDate = formatDate(selectedDate);
-
-  const handleFetchMood = async (selectedDate: string) => {
-    setLoading(true);
-    const fetchedMoodData = await fetchMoodData(selectedDate);
-    setLoading(false);
-
-    setMoodData(fetchedMoodData);
-  };
-
-  useEffect(() => {
-    handleFetchMood(selectedDate);
-  }, [selectedDate]);
 
   // Show loading indicator while data is being loaded
   if (loading) {
@@ -61,14 +41,11 @@ const TodayMoodStep: React.FC<TodayMoodStep> = ({
       <CardContent>
         <div className='flex flex-col items-center space-y-4'>
           <div className='flex flex-col items-center'>
-            <motion.img
+            <AnimatedImage
               src={moodData ? moodIcons[moodData.mood] : moodIcons['']}
               alt={moodData ? moodData.mood : ''}
-              className=' x0:size-28 md:size-32 xl:size-36 2xl:size-36 mb-8'
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              animate={{ rotate: sliderValue }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              className='x0:size-28 md:size-32 xl:size-36 2xl:size-36 mb-8'
+              rotate={sliderValue}
             />
             <span className='text-xl font-bold'>
               {moodData ? moodData.mood : moodLevels[5]}

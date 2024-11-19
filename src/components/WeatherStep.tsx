@@ -1,5 +1,6 @@
+// part of MoodOfTheDay Component, allowing users to choose weather of the day functionality
+'use client';
 import React from 'react';
-import { motion } from 'framer-motion';
 import { CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import {
@@ -11,6 +12,7 @@ import {
   SelectValue,
 } from './ui/select';
 import { weatherOptions } from '@/lib/constants';
+import AnimatedImage from './AnimatedImage';
 
 interface WeatherStepProps {
   sliderValue: number;
@@ -36,21 +38,14 @@ const WeatherStep: React.FC<WeatherStepProps> = ({
       <CardHeader className='pt-0'>
         <CardTitle className='text-2xl '>Weather</CardTitle>
         <div className='flex flex-col items-center'>
-          <motion.img
+          <AnimatedImage
             src={moodIcon}
             alt={selectedMood}
-            className=' x0:size-32  mb-2'
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            animate={{ rotate: sliderValue }}
-            transition={{
-              type: 'spring',
-              stiffness: 400,
-              damping: 10,
-            }}
+            className='x0:size-32 mb-2'
+            rotate={sliderValue}
           />
         </div>
-        <CardDescription className='font-medium text-[#11111a] dark:text-[#ffffff]'>
+        <CardDescription className='font-medium'>
           What was the weather like today?
         </CardDescription>
       </CardHeader>
@@ -73,7 +68,7 @@ const WeatherStep: React.FC<WeatherStepProps> = ({
         </div>
       </CardContent>
       <div className=' justify-center flex gap-2'>
-        <Button onClick={onPrevious}>Prev</Button>
+        <Button onClick={onPrevious}>Back</Button>
         <Button onClick={onSave} disabled={!weather}>
           Save
         </Button>

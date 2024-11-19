@@ -1,5 +1,6 @@
+// part of MoodOfTheDay Component, allowing users to choose their mood factors functionality
+'use client';
 import React from 'react';
-import { motion } from 'framer-motion';
 import { UseFormReturn } from 'react-hook-form';
 import { Button } from './ui/button';
 import {
@@ -16,13 +17,13 @@ import { Separator } from './ui/separator';
 import { FormValues } from '@/lib/formSchema';
 import { CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { factors } from '@/lib/constants';
+import AnimatedImage from './AnimatedImage';
 
 interface FactorsStepProps {
   sliderValue: number;
   step: number;
   setStep: (step: number) => void;
   selectedFactors: string[];
-
   setSelectedFactors: (factors: string[]) => void;
   form: UseFormReturn<FormValues>;
   selectedMood: string;
@@ -42,6 +43,7 @@ const FactorsStep: React.FC<FactorsStepProps> = ({
   moodIcon,
   onPrevious,
 }) => {
+  // Handler for submitting the factors form
   const handleFactorsSubmit = async () => {
     const isValid = await form.trigger();
     if (isValid) {
@@ -57,26 +59,20 @@ const FactorsStep: React.FC<FactorsStepProps> = ({
           <CardHeader className='pt-0 pb-1'>
             <CardTitle className='text-2xl '>Factors</CardTitle>
             <div className='flex flex-col items-center'>
-              <motion.img
+              <AnimatedImage
                 src={moodIcon}
                 alt={selectedMood}
-                className=' x0:size-16  mb-2'
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                animate={{ rotate: sliderValue }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 400,
-                  damping: 10,
-                }}
+                className='x0:size-16 mb-2'
+                rotate={sliderValue}
               />
             </div>
-            <CardDescription className='font-medium text-[#11111a] dark:text-[#ffffff]'>
+            <CardDescription className='font-medium'>
               What factors had the greatest influence?
             </CardDescription>
           </CardHeader>
 
           <CardContent className='pb-4'>
+            {/* Scrollable area for factor selection */}
             <ScrollArea className='h-40 w-60 rounded-md border dark:border-[#4d4d4d]'>
               <div className='pt-2'>
                 {factors.map((factor) => (
@@ -116,7 +112,7 @@ const FactorsStep: React.FC<FactorsStepProps> = ({
             </ScrollArea>
           </CardContent>
           <div className='justify-center flex gap-2'>
-            <Button onClick={onPrevious}>Prev</Button>
+            <Button onClick={onPrevious}>Back</Button>
             <Button
               onClick={handleFactorsSubmit}
               disabled={!form.watch('factors').length}

@@ -1,5 +1,6 @@
+// part of MoodOfTheDay Component, allowing users to choose hours of sleep of the day functionality
+'use client';
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import {
   Select,
@@ -10,6 +11,7 @@ import {
   SelectValue,
 } from './ui/select';
 import { CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import AnimatedImage from './AnimatedImage';
 
 interface SleepStepProps {
   sliderValue: number;
@@ -35,21 +37,14 @@ const SleepStep: React.FC<SleepStepProps> = ({
       <CardHeader className='pt-0'>
         <CardTitle className='text-2xl '>Sleep</CardTitle>
         <div className='flex flex-col items-center'>
-          <motion.img
+          <AnimatedImage
             src={moodIcon}
             alt={selectedMood}
-            className=' x0:size-32  mb-2'
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            animate={{ rotate: sliderValue }}
-            transition={{
-              type: 'spring',
-              stiffness: 400,
-              damping: 10,
-            }}
+            className='x0:size-32 mb-2'
+            rotate={sliderValue}
           />
         </div>
-        <CardDescription className='font-medium text-[#11111a] dark:text-[#ffffff]'>
+        <CardDescription className='font-medium'>
           How many hours did you sleep today?
         </CardDescription>
       </CardHeader>
@@ -72,7 +67,7 @@ const SleepStep: React.FC<SleepStepProps> = ({
         </div>
       </CardContent>
       <div className=' justify-center flex gap-2'>
-        <Button onClick={onPrevious}>Prev</Button>
+        <Button onClick={onPrevious}>Back</Button>
         <Button onClick={onNext} disabled={hoursOfSleep === null}>
           Next
         </Button>

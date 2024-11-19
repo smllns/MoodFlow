@@ -1,9 +1,11 @@
+// part of MoodOfTheDay Component, setting mood of the day functionality
+'use client';
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { Slider } from './ui/slider';
 import { CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import formatDate from '@/lib/formatDate';
+import AnimatedImage from './AnimatedImage';
 
 interface MoodSliderStepProps {
   sliderValue: number;
@@ -30,21 +32,18 @@ const MoodSliderStep: React.FC<MoodSliderStepProps> = ({
     <div className='text-center flex flex-col justify-between items-center h-full'>
       <CardHeader className='pt-0'>
         <CardTitle className='text-2xl '>{formattedDate} Mood</CardTitle>
-        <CardDescription className='font-medium text-[#11111a] dark:text-[#ffffff]'>
+        <CardDescription className='font-medium'>
           How do you feel?
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className='flex flex-col items-center space-y-4'>
           <div className='flex flex-col items-center'>
-            <motion.img
+            <AnimatedImage
               src={moodIcon}
               alt={selectedMood}
-              className=' x0:size-28 md:size-32 xl:size-36 2xl:size-36 mb-4'
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              animate={{ rotate: sliderValue }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              className='x0:size-28 md:size-32 xl:size-36 2xl:size-36 mb-4'
+              rotate={sliderValue}
             />
             <span className='text-lg font-semibold'>{selectedMood}</span>
           </div>
@@ -59,7 +58,7 @@ const MoodSliderStep: React.FC<MoodSliderStepProps> = ({
       </CardContent>
       <div className=' justify-center flex gap-2'>
         <Button onClick={onPrevious} disabled={!selectedMood}>
-          Prev
+          Back
         </Button>
         <Button onClick={onNext} disabled={!selectedMood}>
           Next

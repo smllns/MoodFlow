@@ -1,3 +1,4 @@
+//Mood vs Weather page opened from sidebar
 'use client';
 import React, { useMemo } from 'react';
 import { fetchAllMoodData } from '../functions/authService';
@@ -25,11 +26,11 @@ export interface AggregatedDataWeather {
   'Very good': number;
 }
 
-
 const WeatherPage: React.FC<PageProps> = ({
   onArticleCategoryClicked,
   setCurrentPage,
 }) => {
+  // State variables for storing chart data and loading state
   const [chartData, setChartData] = React.useState<AggregatedDataWeather[]>([]);
   const [weekChartData, setWeekChartData] = React.useState<
     AggregatedDataWeather[]
@@ -48,9 +49,11 @@ const WeatherPage: React.FC<PageProps> = ({
   >();
   const [loading, setLoading] = React.useState(true);
 
+  // Memoized values for different date ranges
   const weekDays = useMemo(() => generateDateRange(7), []);
   const monthDays = useMemo(() => generateDateRange(31), []);
 
+  // Function to aggregate mood data based on provided date range
   const aggregateData = (
     data: MoodDataItem[],
     filterDays: string[]
@@ -76,7 +79,6 @@ const WeatherPage: React.FC<PageProps> = ({
       if (filterDays.includes(item.date) || filterDays.length === 0) {
         const weather = item.data.weather;
         const mood = item.data.mood as MoodType;
-
         if (weather != null && mood) {
           let category;
           if (weatherCategories.includes(weather)) {
@@ -99,12 +101,12 @@ const WeatherPage: React.FC<PageProps> = ({
     return { aggregated, mostFrequentWeather };
   };
 
+  // Fetching data on component mount and setting chart data
   React.useEffect(() => {
     const getMoodData = async () => {
       setLoading(true);
 
       const data = await fetchAllMoodData();
-
       const allData = aggregateData(data, []);
       const weekData = aggregateData(data, weekDays);
       const monthData = aggregateData(data, monthDays);
@@ -124,6 +126,7 @@ const WeatherPage: React.FC<PageProps> = ({
     getMoodData();
   }, []);
 
+  // show articles on weather category
   const weatherData = articlesData.find(
     (article) => article.title === 'Mood and Weather 🌪'
   );

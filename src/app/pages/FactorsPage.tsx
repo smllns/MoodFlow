@@ -1,3 +1,4 @@
+//Mood vs Factors page opened from sidebar
 'use client';
 import React, { useMemo } from 'react';
 import { fetchAllMoodData } from '../functions/authService';
@@ -21,6 +22,8 @@ export interface AggregatedDataFactors {
   mood: number;
   factors: Array<string>;
 }
+
+// Labeling mood types with numeric values for easier comparison
 const moodLabels = {
   'Very bad': 1,
   'Slightly bad': 2,
@@ -33,6 +36,7 @@ const FactorsPage: React.FC<PageProps> = ({
   onArticleCategoryClicked,
   setCurrentPage,
 }) => {
+  // State variables for storing chart data and loading state
   const [chartData, setChartData] = React.useState<AggregatedDataFactors[]>([]);
   const [weekChartData, setWeekChartData] = React.useState<
     AggregatedDataFactors[]
@@ -40,12 +44,13 @@ const FactorsPage: React.FC<PageProps> = ({
   const [monthChartData, setMonthChartData] = React.useState<
     AggregatedDataFactors[]
   >([]);
-
   const [loading, setLoading] = React.useState(true);
 
+  // Memoized values for week and month date ranges
   const weekDays = useMemo(() => generateDateRange(7), []);
   const monthDays = useMemo(() => generateDateRange(31), []);
 
+  // Function to aggregate mood data based on provided date range
   const aggregateData = (
     data: MoodDataItem[],
     filterDays: string[]
@@ -72,12 +77,11 @@ const FactorsPage: React.FC<PageProps> = ({
     return aggregatedData;
   };
 
+  // Fetching data on component mount and setting chart data
   React.useEffect(() => {
     const getMoodData = async () => {
       setLoading(true);
-
       const data = await fetchAllMoodData();
-
       const allData = aggregateData(data, []);
       const weekData = aggregateData(data, weekDays);
       const monthData = aggregateData(data, monthDays);
@@ -90,6 +94,7 @@ const FactorsPage: React.FC<PageProps> = ({
     getMoodData();
   }, []);
 
+  // show articles on factors category
   const factorsData = articlesData.find(
     (article) => article.title === 'Mood and Factors 🌈'
   );

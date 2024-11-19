@@ -1,19 +1,13 @@
+// part of MoodOfTheDay Component, displaying full mood of the day info functionality
 'use client';
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import { CardContent, CardHeader, CardTitle } from './ui/card';
-import { fetchMoodData } from '@/app/functions/authService';
 import { moodIcons } from '@/lib/constants';
 import { Button } from './ui/button';
-import Image from 'next/image';
 import formatDate from '@/lib/formatDate';
 import LoadingSpinner from './LoadingSpinner';
-interface MoodData {
-  mood: keyof typeof moodIcons;
-  factors: string[];
-  sleep: number | string | null;
-  weather: string;
-}
+import useFetchMoodData from '@/hooks/useFetchMoodData';
+import AnimatedImage from './AnimatedImage';
 interface FullMoodInfoStep {
   sliderValue: number;
   onGetFullInfo: () => void;
@@ -24,22 +18,17 @@ const FullMoodInfoStep: React.FC<FullMoodInfoStep> = ({
   onGetFullInfo,
   selectedDate,
 }) => {
-  const [moodData, setMoodData] = useState<MoodData | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Function to fetch mood data based on the selected date
+  const { moodData, loading } = useFetchMoodData(selectedDate);
   const formattedDate = formatDate(selectedDate);
-  const handleFetchMood = async (selectedDate: string) => {
-    setLoading(true);
-    const fetchedMoodData = await fetchMoodData(selectedDate);
-    setLoading(false);
-    if (fetchedMoodData) {
-      console.log('Fetched mood data:', fetchedMoodData);
-      setMoodData(fetchedMoodData);
-    }
-  };
 
-  useEffect(() => {
-    handleFetchMood(selectedDate);
-  }, [selectedDate]);
+  // Function to render data with default values
+  const renderData = (label: string, value: string | null | undefined) => (
+    <p className='font-semibold text-lg'>
+      <span className='font-normal'>{label}: </span>
+      {value || 'not stated'}
+    </p>
+  );
 
   // Show loading indicator while data is being loaded
   if (loading) {
@@ -55,35 +44,28 @@ const FullMoodInfoStep: React.FC<FullMoodInfoStep> = ({
       <CardContent>
         <div className='flex flex-col items-center space-y-4'>
           <div className='flex flex-col items-center'>
-            <motion.img
+            <AnimatedImage
               src={moodData ? moodIcons[moodData.mood] : moodIcons['']}
               alt={moodData ? moodData.mood : ''}
-              className=' x0:size-28 md:size-32 xl:size-36 2xl:size-36 '
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              animate={{ rotate: sliderValue }}
-              transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              className='x0:size-28 md:size-32 xl:size-36 2xl:size-36 '
+              rotate={sliderValue}
             />
           </div>
           <div className='flex flex-col text-start max-w-fit '>
-            <p className='font-semibold text-lg'>
-              <span className='font-normal'>Mood: </span>
-              {moodData ? moodData.mood : 'not stated'}
-            </p>
-            <p className='font-semibold text-lg'>
-              <span className='font-normal'>Weather: </span>
-              {moodData ? moodData.weather : 'not stated'}
-            </p>
-            <p className='font-semibold text-lg'>
-              <span className='font-normal'>Sleep: </span>
-              {moodData ? moodData.sleep + 'h' : 'not stated'}
-            </p>
-            <p className='font-semibold text-lg'>
-              <span className='font-normal'>Factors: </span>
-              {moodData && moodData.factors.length > 0
-                ? moodData.factors.join(', ')
-                : 'not stated'}
-            </p>
+            <div className='flex flex-col text-start max-w-fit'>
+              {renderData('Mood', moodData?.mood)}
+              {renderData('Weather', moodData?.weather)}
+              {renderData(
+                'Sleep',
+                moodData?.sleep ? `${moodData.sleep}h` : null
+              )}
+              {renderData(
+                'Factors',
+                moodData && moodData.factors.length > 0
+                  ? moodData.factors.join(', ')
+                  : null
+              )}
+            </div>
           </div>
         </div>
       </CardContent>

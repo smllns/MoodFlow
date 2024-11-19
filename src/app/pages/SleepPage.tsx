@@ -1,10 +1,16 @@
+//Mood vs Sleep page opened from sidebar
 'use client';
 import React, { useMemo } from 'react';
 import { fetchAllMoodData } from '../functions/authService';
 import SleepMoodChart from '@/components/SleepMoodChart';
 import SleepMoodChartInteractive from '@/components/SleepMoodChartInteractive';
 import generateDateRange from '@/lib/generateDateRange';
-import { articlesData, MoodDataItem, MoodType, PageProps } from '@/lib/constants';
+import {
+  articlesData,
+  MoodDataItem,
+  MoodType,
+  PageProps,
+} from '@/lib/constants';
 import Footer from '@/components/ui/footer';
 import PageTitle from '@/components/ui/page-title';
 import ArticleCard from '@/components/ArticleCard';
@@ -23,12 +29,11 @@ export interface AggregatedData {
   'Very good': number;
 }
 
-
-
 const SleepPage: React.FC<PageProps> = ({
   onArticleCategoryClicked,
   setCurrentPage,
 }) => {
+  // State variables for storing chart data and loading state
   const [chartData, setChartData] = React.useState<AggregatedData[]>([]);
   const [weekChartData, setWeekChartData] = React.useState<AggregatedData[]>(
     []
@@ -45,12 +50,13 @@ const SleepPage: React.FC<PageProps> = ({
   const [averageSleepDataMonth, setAverageSleepDataMonth] = React.useState<
     string | undefined
   >();
-
   const [loading, setLoading] = React.useState(true);
 
+  // Memoized values for different date ranges
   const weekDays = useMemo(() => generateDateRange(7), []);
   const monthDays = useMemo(() => generateDateRange(31), []);
 
+  // Function to aggregate mood data based on provided date range
   const aggregateData = (
     data: MoodDataItem[],
     filterDays: string[]
@@ -100,6 +106,7 @@ const SleepPage: React.FC<PageProps> = ({
     return { aggregated, formattedAverageSleep };
   };
 
+  // Fetching data on component mount and setting chart data
   React.useEffect(() => {
     const getMoodData = async () => {
       setLoading(true);
@@ -125,6 +132,7 @@ const SleepPage: React.FC<PageProps> = ({
     getMoodData();
   }, []);
 
+  // show articles on sleep category
   const sleepData = articlesData.find(
     (article) => article.title === 'Mood and Sleep 💤'
   );
@@ -141,7 +149,6 @@ const SleepPage: React.FC<PageProps> = ({
       <SleepMoodChartInteractive
         chartData7={weekChartData}
         chartData30={monthChartData}
-        // info='Information for the last 30 days'
         loading={loading}
         sleep7={averageSleepDataWeek}
         sleep30={averageSleepDataMonth}

@@ -1,3 +1,4 @@
+//Mood Statistics page opened from sidebar
 'use client';
 import React, { useMemo } from 'react';
 import { fetchAllMoodData } from '../functions/authService';
@@ -24,6 +25,7 @@ const FullStatsPage: React.FC<PageProps> = ({
   onArticleCategoryClicked,
   setCurrentPage,
 }) => {
+  // State variables for storing chart data and loading state
   const [allData, setAllData] = React.useState<MoodDataItem[]>([]);
   const [chartData, setChartData] = React.useState<AggregatedDataMood[]>([]);
   const [weekChartData, setWeekChartData] = React.useState<
@@ -47,11 +49,9 @@ const FullStatsPage: React.FC<PageProps> = ({
   const [mostFrequentMoodWeek, setMostFrequentMoodWeek] = React.useState<
     string | undefined
   >();
-
   const [mostFrequentMoodTwoWeek, setMostFrequentMoodTwoWeek] = React.useState<
     string | undefined
   >();
-
   const [mostFrequentMoodMonth, setMostFrequentMoodMonth] = React.useState<
     string | undefined
   >();
@@ -59,15 +59,16 @@ const FullStatsPage: React.FC<PageProps> = ({
     React.useState<string | undefined>();
   const [mostFrequentMoodHalfYear, setMostFrequentMoodHalfYear] =
     React.useState<string | undefined>();
-
   const [loading, setLoading] = React.useState(true);
 
+  // Memoized values for different date ranges
   const weekDays = useMemo(() => generateDateRange(7), []);
   const twoWeekDays = useMemo(() => generateDateRange(14), []);
   const monthDays = useMemo(() => generateDateRange(31), []);
   const threeMonthDays = useMemo(() => generateDateRange(92), []);
   const halfYearDays = useMemo(() => generateDateRange(183), []);
 
+  // Function to aggregate mood data based on provided date range
   const aggregateData = (
     data: MoodDataItem[],
     filterDays: string[]
@@ -108,12 +109,12 @@ const FullStatsPage: React.FC<PageProps> = ({
     return { aggregated, mostFrequentMood };
   };
 
+  // Fetching data on component mount and setting chart data
   React.useEffect(() => {
     const getMoodData = async () => {
       setLoading(true);
 
       const data = await fetchAllMoodData();
-
       const allData = aggregateData(data, []);
       const weekData = aggregateData(data, weekDays);
       const twoWeekData = aggregateData(data, twoWeekDays);
@@ -146,6 +147,8 @@ const FullStatsPage: React.FC<PageProps> = ({
 
     getMoodData();
   }, []);
+
+  // show articles on mood category
   const moodInfoData = articlesData.find(
     (article) => article.title === 'Mood and Daily Patterns 🧶'
   );
@@ -199,7 +202,7 @@ const FullStatsPage: React.FC<PageProps> = ({
           />
         </>
       )}
-      
+
       <div className='-mt-8 -mb-4'>
         <PageTitle title='Your Full Mood Data' />
       </div>

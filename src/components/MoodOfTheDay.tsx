@@ -1,4 +1,4 @@
-//reusable mood of the day setter/information display
+//reusable mood of the day setter/mood of the day information display
 'use client';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -99,9 +99,6 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
     { component: WeatherStep },
   ];
 
-  // Default setStep function to avoid undefined issue
-  const defaultSetStep = (step: number) => {};
-
   // Helper function to get card classes based on the fullInfo state
   const getCardClasses = (fullInfo: boolean) =>
     `mx-auto p-5 ${
@@ -110,91 +107,20 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
         : 'h-[420px] xxs:w-[275px] xs:w-[335px]'
     } flex items-center justify-center bg-gray-100/50 dark:bg-neutral-800/50`;
 
+  // Assigns a title based on whether the calendar view is active and if full mood information is shown
+  const title =
+    !isCalendar && !fullInfo
+      ? 'Set The Mood of The Day'
+      : 'A Deep Dive into Your Mood';
+
   return (
     <div className='flex flex-col items-center justify-center x0:h-[95vh] lg:h-fit'>
       {/* Render title based on whether the full information view is active */}
-      {!isCalendar &&
-        (!fullInfo ? (
-          <h1 className='text-2xl font-bold x0:pb-2 lg:pt-8 lg:pb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
-            Set The Mood of The Day
-          </h1>
-        ) : (
-          <h1 className='text-2xl font-bold x0:pb-2  lg:pt-8 lg:pb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
-            A Deep Dive into Your Mood
-          </h1>
-        ))}
-      {/* Main card component that wraps the different steps */}
-      {/* <Card
-        className={`mx-auto p-5 ${
-          fullInfo
-            ? 'h-fit xxs:w-[275px] xs:w-[380px]'
-            : 'h-[420px] xxs:w-[275px] xs:w-[335px]'
-        }  flex items-center justify-center bg-gray-100/50 dark:bg-neutral-800/50`}
-      >
-        {fullInfo && (
-          <FullMoodInfoStep
-            sliderValue={sliderValue}
-            onGetFullInfo={handleFullInfo}
-            selectedDate={selectedDate}
-          />
-        )}
-        {step === 1 && !fullInfo && (
-          <TodayMoodStep
-            sliderValue={sliderValue}
-            onNext={handleNext}
-            onGetFullInfo={handleFullInfo}
-            selectedDate={selectedDate}
-          />
-        )}
-        {step === 2 && (
-          <MoodSliderStep
-            selectedDate={selectedDate}
-            sliderValue={sliderValue}
-            setSliderValue={setSliderValue}
-            selectedMood={selectedMood}
-            moodIcon={moodIcon}
-            onNext={handleNext}
-            onPrevious={handlePrevious}
-          />
-        )}
-        {step === 3 && (
-          <FactorsStep
-            sliderValue={sliderValue}
-            step={step}
-            setStep={setStep}
-            selectedFactors={selectedFactors}
-            setSelectedFactors={setSelectedFactors}
-            form={form}
-            selectedMood={selectedMood}
-            moodIcon={moodIcon}
-            onNext={handleNext}
-            onPrevious={handlePrevious}
-          />
-        )}
-        {step === 4 && (
-          <SleepStep
-            sliderValue={sliderValue}
-            selectedMood={selectedMood}
-            moodIcon={moodIcon}
-            hoursOfSleep={hoursOfSleep}
-            setHoursOfSleep={setHoursOfSleep}
-            onNext={handleNext}
-            onPrevious={handlePrevious}
-          />
-        )}
-        {step === 5 && (
-          <WeatherStep
-            sliderValue={sliderValue}
-            selectedMood={selectedMood}
-            moodIcon={moodIcon}
-            weather={weather}
-            setWeather={setWeather}
-            onSave={handleSave}
-            onPrevious={handlePrevious}
-          />
-        )}
-      </Card> */}
-
+      {!isCalendar && (
+        <h1 className='text-2xl font-bold x0:pb-2 lg:pt-8 lg:pb-8 text-center text-[#11111a] dark:text-[#ffffff]'>
+          {title}
+        </h1>
+      )}
       <Card className={getCardClasses(fullInfo)}>
         {fullInfo ? (
           <FullMoodInfoStep
@@ -217,7 +143,7 @@ const MoodOfTheDay: React.FC<MoodOfTheDayProps> = ({
                 onPrevious={handlePrevious}
                 onGetFullInfo={handleFullInfo}
                 step={step || 1}
-                setStep={setStep || defaultSetStep}
+                setStep={setStep}
                 selectedFactors={selectedFactors}
                 setSelectedFactors={setSelectedFactors}
                 form={form}
