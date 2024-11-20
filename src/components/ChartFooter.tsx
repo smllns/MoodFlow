@@ -1,13 +1,7 @@
 'use client';
 import React from 'react';
 import { CardFooter } from './ui/card';
-
-interface ChartConfig {
-  [key: string]: {
-    color: string;
-    label: string;
-  };
-}
+import { ChartConfig } from './ui/chart';
 
 const ChartFooter: React.FC<{ chartConfig: ChartConfig }> = ({
   chartConfig,
