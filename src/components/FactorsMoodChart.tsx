@@ -1,28 +1,16 @@
+// React functional component to display a mood chart based on factors
+'use client';
 import { useState } from 'react';
 import { AggregatedDataFactors } from '@/app/pages/FactorsPage';
 import React from 'react';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from './ui/card';
-import { ChartConfig, ChartContainer, ChartTooltip } from './ui/chart';
+import { Card, CardContent, CardFooter } from './ui/card';
+import { ChartContainer, ChartTooltip } from './ui/chart';
 import { CartesianGrid, XAxis, LineChart, Line, Dot, YAxis } from 'recharts';
-import Image from 'next/image';
 import ChartTooltipContentFactors from './ChartTooltipContentFactors';
-import { monthNames } from '@/lib/constants';
+import { factorsChartConfig, monthNames } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
-
-const chartConfig = {
-  1: { color: 'var(--chart-1)', label: 'Very bad' },
-  2: { color: 'var(--chart-2)', label: 'Slightly bad' },
-  3: { color: 'var(--chart-3)', label: 'Okay' },
-  4: { color: 'var(--chart-4)', label: 'Slightly good' },
-  5: { color: 'var(--chart-5)', label: 'Very good' },
-  6: { color: 'var(--dot-tr)', label: 'Not Stated' },
-} satisfies ChartConfig;
+import ChartNavigation from './ChartNavigation';
+import ChartFooter from './ChartFooter';
 
 interface FactorsMoodChartProps {
   chartData: AggregatedDataFactors[];
@@ -33,11 +21,7 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
   chartData,
   loading,
 }) => {
-  const [activeChartPeriod, setActiveChartPeriod] = useState<'3' | '6'>('3');
-
-  const handleChartChange = (period: '3' | '6') => {
-    setActiveChartPeriod(period);
-  };
+  const [activeChartPeriod, setActiveChartPeriod] = useState<string>('3');
 
   // Show loading indicator while data is being loaded
   if (loading) {
@@ -46,12 +30,14 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
     );
   }
 
+  // Get the current date, month, and year for calculating the date range
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
   const monthsMap = monthNames;
 
+  // Calculating the months to display based on the active chart period
   const sortedMonths = Array.from(
     { length: Number(activeChartPeriod) },
     (_, i) => {
@@ -66,6 +52,7 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
     sortedMonths.some((month) => month.monthName === item.month)
   );
 
+  // Formatting the data for each day in the selected months, filling in missing days
   const formattedData = sortedMonths.flatMap(
     ({ monthName, monthIndex, year }) => {
       const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
@@ -91,39 +78,18 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
       });
     }
   );
-  console.log(formattedData);
-
   return (
     <Card className='bg-gray-100/50 dark:bg-neutral-800/50 '>
-      <CardHeader className='flex flex-col items-stretch space-y-0  p-0   border-neutral-200 dark:border-neutral-800'>
-        <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6 '>
-          <CardTitle className='px-6 text-lg'>
-            Information for the last{' '}
-            {activeChartPeriod === '3' ? '3 months' : '6 months'}
-          </CardTitle>
-        </div>
-        <div className='flex'>
-          <button
-            onClick={() => handleChartChange('3')}
-            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0 border border-neutral-200 dark:border-neutral-800 ${
-              activeChartPeriod === '3' ? 'bg-gray-100 dark:bg-neutral-800' : ''
-            }`}
-          >
-            Last 3 months
-          </button>
-          <button
-            onClick={() => handleChartChange('6')}
-            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0  border border-neutral-200 dark:border-neutral-800 ${
-              activeChartPeriod === '6' ? 'bg-gray-100 dark:bg-neutral-800' : ''
-            }`}
-          >
-            Last 6 months
-          </button>
-        </div>
-      </CardHeader>
+      <ChartNavigation
+        active={activeChartPeriod}
+        setActiveChartPeriod={setActiveChartPeriod}
+        num1={3}
+        num2={6}
+        dates='months'
+      />
       <CardContent>
         <ChartContainer
-          config={chartConfig}
+          config={factorsChartConfig}
           className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full '
         >
           <LineChart accessibilityLayer data={formattedData}>
@@ -153,12 +119,13 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
                   factors: string[];
                 };
                 const formattedDate = `${data.month} ${data.date}`;
-                const moodText = chartConfig[data.mood]?.label || 'Unknown';
+                const moodText =
+                  factorsChartConfig[data.mood]?.label || 'Unknown';
                 const factorsList = data.factors.length
                   ? data.factors.join(', ')
                   : 'Not stated';
                 const moodColor =
-                  chartConfig[data.mood]?.color || 'var(--dot-tr)';
+                  factorsChartConfig[data.mood]?.color || 'var(--dot-tr)';
 
                 return (
                   <ChartTooltipContentFactors
@@ -178,7 +145,8 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
               dot={({ payload, ...props }) => {
                 const typedPayload = payload as { mood: 1 | 2 | 3 | 4 | 5 | 6 };
                 const color =
-                  chartConfig[typedPayload.mood]?.color || 'var(--dot-tr)';
+                  factorsChartConfig[typedPayload.mood]?.color ||
+                  'var(--dot-tr)';
                 return (
                   <Dot
                     key={payload.browser}
@@ -199,10 +167,12 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
           ))}
         </div>
       </CardContent>
-      <CardFooter className='flex flex-wrap gap-4 items-center justify-center text-sm'>
-        {Object.keys(chartConfig).map((key) => {
-          const numericKey = Number(key) as keyof typeof chartConfig;
-          const { color, label } = chartConfig[numericKey];
+      <ChartFooter chartConfig={factorsChartConfig} />
+
+      {/* <CardFooter className='flex flex-wrap gap-4 items-center justify-center text-sm'>
+        {Object.keys(factorsChartConfig).map((key) => {
+          const numericKey = Number(key) as keyof typeof factorsChartConfig;
+          const { color, label } = factorsChartConfig[numericKey];
           return (
             <div key={key} className='flex items-center gap-2'>
               <div
@@ -213,7 +183,7 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
             </div>
           );
         })}
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };

@@ -1,5 +1,5 @@
+// Mood data table component that renders user mood data with sorting and filtering functionality //used in full stats component
 'use client';
-
 import * as React from 'react';
 import {
   ColumnDef,
@@ -28,9 +28,10 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { moodIcons } from '@/lib/constants';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { printContent } from '@/lib/printContent';
+import { exportInPdf } from '@/lib/exportInPdf';
 
+// Defining the structure of a single mood data entry
 export interface MoodDataItem {
   date: string;
   data: {
@@ -45,6 +46,7 @@ export interface MoodDataTableProps {
   data: MoodDataItem[];
 }
 
+// Predefined mood order to sort the moods in a specific sequence
 const MOOD_ORDER = [
   'Very good',
   'Slightly good',
@@ -53,6 +55,7 @@ const MOOD_ORDER = [
   'Very bad',
 ];
 
+// Custom filter function for filtering rows by formatted date
 function filterByFormattedDate(
   row: any,
   columnId: string,
@@ -69,6 +72,7 @@ function filterByFormattedDate(
   return formattedDate.includes(filterValue.toLowerCase());
 }
 
+// Defining the table columns with sorting and filtering capabilities
 export const columns: ColumnDef<MoodDataItem>[] = [
   {
     accessorKey: 'date',
@@ -81,6 +85,7 @@ export const columns: ColumnDef<MoodDataItem>[] = [
         <ArrowUpDown />
       </Button>
     ),
+    // Renders the formatted date in the cell
     cell: ({ row }) => {
       const date = new Date(row.getValue('date') as string);
       const formattedDate = new Intl.DateTimeFormat('en-GB', {
@@ -104,17 +109,14 @@ export const columns: ColumnDef<MoodDataItem>[] = [
         <ArrowUpDown />
       </Button>
     ),
+    // Renders mood with an associated icon
     cell: ({ row }) => {
       const mood = row.getValue('mood') as string;
       const iconSrc =
         moodIcons[mood as keyof typeof moodIcons] || moodIcons[''];
       return (
         <div className='flex items-center gap-2'>
-          <img
-            src={`/${iconSrc}`}
-            alt={mood}
-            className='w-5 h-5' // Размер иконки
-          />
+          <img src={`/${iconSrc}`} alt={mood} className='w-5 h-5' />
           {mood}
         </div>
       );
@@ -131,7 +133,7 @@ export const columns: ColumnDef<MoodDataItem>[] = [
     accessorFn: (row) => row.data.weather,
     id: 'weather',
     header: ({ column }) => <Button variant='cool'>Weather</Button>,
-    // header: 'Weather',
+    // Renders weather condition
     cell: ({ row }) => <div>{row.getValue('weather')}</div>,
   },
   {
@@ -146,16 +148,17 @@ export const columns: ColumnDef<MoodDataItem>[] = [
         <ArrowUpDown />
       </Button>
     ),
-    // Сортировка по числовым значениям
+
     sortingFn: (rowA, rowB) =>
       rowA.original.data.sleep - rowB.original.data.sleep,
-    cell: ({ row }) => <div>{row.getValue('sleep')}h</div>, // Добавляем "h" к числовым значениям
+    // Renders sleep hours with 'h' suffix
+    cell: ({ row }) => <div>{row.getValue('sleep')}h</div>,
   },
   {
     accessorFn: (row) => row.data.factors,
     id: 'factors',
     header: ({ column }) => <Button variant='cool'>Factors</Button>,
-    // header: 'Factors',
+    // Renders factors as a comma-separated list
     cell: ({ row }) => {
       const factors = row.getValue('factors') as string[];
       return <div>{factors.join(', ')}</div>;
@@ -169,6 +172,7 @@ export function DataTable({ data }: MoodDataTableProps) {
   ]);
   const [globalFilter, setGlobalFilter] = React.useState('');
 
+  // React table instance with sorting and filtering configuration
   const table = useReactTable({
     data,
     columns,
@@ -182,90 +186,15 @@ export function DataTable({ data }: MoodDataTableProps) {
       filterByFormattedDate: filterByFormattedDate,
     },
   });
-
-  function printContent() {
-    // Получаем элемент таблицы
-    const tableElement = document.querySelector('table');
-
-    if (!tableElement) return;
-
-    // Создаем новое окно для печати
-    const printWindow = window.open('', '', 'width=800,height=600');
-
-    if (printWindow) {
-      printWindow.document.write(
-        '<html><head><title>MoodFlow Mood Data Table</title>'
-      );
-
-      // Копируем все стили со страницы
-      const styles = document.querySelectorAll('style, link[rel="stylesheet"]');
-      styles.forEach((style) => {
-        printWindow.document.write(style.outerHTML);
-      });
-
-      printWindow.document.write('</head><body>');
-      printWindow.document.write(tableElement.outerHTML); // Вставляем таблицу в новое окно
-
-      printWindow.document.write(
-        '<p class="mt-auto text-center text-sm">© 2024 All rights reserved by smllns</p>'
-      );
-
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
-
-      // Добавляем обработчик события, чтобы закрыть окно после отмены печати
-      printWindow.addEventListener('afterprint', () => {
-        printWindow.close();
-      });
-
-      // Запускаем печать
-      printWindow.print();
-    }
-  }
-
-  function exportInPdf() {
-    // Получаем элемент таблицы
-    const tableElement = document.querySelector('table');
-
-    if (!tableElement) return;
-
-    // Используем html2canvas для создания скриншота таблицы
-    html2canvas(tableElement as HTMLElement, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-
-      // Создаем новый документ PDF
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-
-      const imgWidth = pageWidth;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      // Добавляем изображение в PDF, разбивая его на страницы
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position -= pageHeight; // Сдвиг на следующую страницу
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      // Сохраняем PDF
-      pdf.save('MoodFlow_Data.pdf');
-    });
-  }
-
   return (
     <div className=' x0:w-[90vw] md:w-[55vw] lg:w-full overflow-x-auto'>
       <div className='flex flex-row gap-2 items-center w-full justify-end px-2 '>
         <Button
           variant='secondary'
-          onClick={printContent}
+          onClick={() => {
+            const tableElement = document.querySelector('table');
+            if (tableElement) printContent(tableElement as HTMLElement);
+          }}
           className='flex items-center space-x-1'
         >
           <svg
@@ -286,7 +215,10 @@ export function DataTable({ data }: MoodDataTableProps) {
         </Button>
         <Button
           variant='secondary'
-          onClick={exportInPdf}
+          onClick={() => {
+            const tableElement = document.querySelector('table');
+            if (tableElement) exportInPdf(tableElement as HTMLElement);
+          }}
           className='flex items-center space-x-1'
         >
           <svg

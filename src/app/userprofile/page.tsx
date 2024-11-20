@@ -1,4 +1,4 @@
-//main page visible when user is logged in
+//main page visible when user is logged in (responsible for rendering different page components from sidebar clicks)
 'use client';
 import { AppSidebar } from '@/components/AppSidebar';
 import {
@@ -17,9 +17,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { auth, db } from '@/lib/firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MoodOfTheDayPage from '../pages/MoodOfTheDayPage';
@@ -123,43 +120,11 @@ export default function Page() {
     return titles[page] || 'Mood of the day';
   };
 
-  // // useEffect hook to check user authentication status
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-  //     if (currentUser) {
-  //       try {
-  //         const userDocRef = doc(db, 'users', currentUser.uid);
-  //         const userDoc = await getDoc(userDocRef);
-
-  //         if (userDoc.exists()) {
-  //           setUserName(userDoc.data()?.name);
-  //         } else {
-  //           setError('User not found in Firestore.');
-  //         }
-  //       } catch (error) {
-  //         console.error('Error fetching user data:', error);
-  //         setError('Failed to load user data.');
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     } else {
-  //       setError('No user is currently logged in. 👀');
-  //       setLoading(false);
-  //     }
-  //   });
-
-  //   return () => unsubscribe();
-  // }, []);
-
-  // Use the checkAuthState function to handle authentication
+  // Use the checkAuthState function to handle authentication + display user's name
   useEffect(() => {
-    const unsubscribe = checkAuthState(
-      setUserName,
-      setError,
-      setLoading,
-    );
+    const unsubscribe = checkAuthState(setUserName, setError, setLoading);
 
-    return () => unsubscribe(); // Clean up the auth listener when the component unmounts
+    return () => unsubscribe();
   }, []);
 
   // Show loading indicator while data is being loaded
@@ -204,7 +169,6 @@ export default function Page() {
                   {getTitleFromPage(currentPage)}
                 </BreadcrumbPage>
               </BreadcrumbItem>
-
               {isArticles != '' && article === '' && (
                 <>
                   <BreadcrumbSeparator />

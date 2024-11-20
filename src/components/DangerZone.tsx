@@ -1,4 +1,4 @@
-//rendering account/data deletion ui
+//rendering account/data deletion ui in settings page
 'use client';
 import React from 'react';
 import {

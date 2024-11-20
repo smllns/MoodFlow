@@ -1,28 +1,15 @@
+'use client';
 import { useState } from 'react';
 import { AggregatedDataFactors } from '@/app/pages/FactorsPage';
 import React from 'react';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from './ui/card';
-import { ChartConfig, ChartContainer, ChartTooltip } from './ui/chart';
+import { Card, CardContent, CardFooter } from './ui/card';
+import { ChartContainer, ChartTooltip } from './ui/chart';
 import { CartesianGrid, XAxis, LineChart, Line, Dot, YAxis } from 'recharts';
-import Image from 'next/image';
 import ChartTooltipContentFactors from './ChartTooltipContentFactors';
-import { monthNames } from '@/lib/constants';
+import { factorsChartConfig, monthNames } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
-
-const chartConfig = {
-  1: { color: 'var(--chart-1)', label: 'Very bad' },
-  2: { color: 'var(--chart-2)', label: 'Slightly bad' },
-  3: { color: 'var(--chart-3)', label: 'Okay' },
-  4: { color: 'var(--chart-4)', label: 'Slightly good' },
-  5: { color: 'var(--chart-5)', label: 'Very good' },
-  6: { color: 'var(--dot-tr)', label: 'Not Stated' },
-} satisfies ChartConfig;
+import ChartNavigation from './ChartNavigation';
+import ChartFooter from './ChartFooter';
 
 interface FactorsMoodChartProps {
   weekChartData: AggregatedDataFactors[];
@@ -35,11 +22,7 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
   monthChartData,
   loading,
 }) => {
-  const [activeChartPeriod, setActiveChartPeriod] = useState<'7' | '30'>('7');
-
-  const handleChartChange = (period: '7' | '30') => {
-    setActiveChartPeriod(period);
-  };
+  const [activeChartPeriod, setActiveChartPeriod] = useState<string>('7');
 
   // Show loading indicator while data is being loaded
   if (loading) {
@@ -102,41 +85,20 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
 
   const formattedWeekData = formatChartData(weekChartData, sortedWeekDates);
   const formattedMonthData = formatChartData(monthChartData, sortedMonthDates);
-  console.log(sortedWeekDates);
 
   return (
     <Card className='bg-gray-100/50 dark:bg-neutral-800/50'>
-      <CardHeader className='flex flex-col items-stretch space-y-0  p-0 lg:flex-row lg:border-b border-neutral-200 dark:border-neutral-800'>
-        <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6 '>
-          <CardTitle className='px-6 text-lg'>
-            Information for the last{' '}
-            {activeChartPeriod === '7' ? '7 days' : '30 days'}
-          </CardTitle>
-        </div>
-        <div className='flex'>
-          <button
-            onClick={() => handleChartChange('7')}
-            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0 lg:border-l  lg:border-b-0 lg:border-t-0 lg:px-4 lg:py-2 border border-neutral-200 dark:border-neutral-800 ${
-              activeChartPeriod === '7' ? 'bg-gray-100 dark:bg-neutral-800' : ''
-            }`}
-          >
-            7 days
-          </button>
-          <button
-            onClick={() => handleChartChange('30')}
-            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0 lg:border-l  lg:border-b-0 lg:border-t-0 lg:px-4 lg:py-2 border border-neutral-200 dark:border-neutral-800 ${
-              activeChartPeriod === '30'
-                ? 'bg-gray-100 dark:bg-neutral-800'
-                : ''
-            }`}
-          >
-            30 days
-          </button>
-        </div>
-      </CardHeader>
+      <ChartNavigation
+        active={activeChartPeriod}
+        setActiveChartPeriod={setActiveChartPeriod}
+        num1={7}
+        num2={30}
+        headerClass='lg:flex-row lg:border-b'
+        dates='days'
+      />
       <CardContent>
         <ChartContainer
-          config={chartConfig}
+          config={factorsChartConfig}
           className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full '
         >
           <LineChart
@@ -171,12 +133,13 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
                   factors: string[];
                 };
                 const formattedDate = `${data.month} ${data.date}`;
-                const moodText = chartConfig[data.mood]?.label || 'Unknown';
+                const moodText =
+                  factorsChartConfig[data.mood]?.label || 'Unknown';
                 const factorsList = data.factors.length
                   ? data.factors.join(', ')
                   : 'Not stated';
                 const moodColor =
-                  chartConfig[data.mood]?.color || 'var(--dot-tr)';
+                  factorsChartConfig[data.mood]?.color || 'var(--dot-tr)';
 
                 return (
                   <ChartTooltipContentFactors
@@ -198,7 +161,8 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
                   mood: 1 | 2 | 3 | 4 | 5 | 6;
                 };
                 const color =
-                  chartConfig[typedPayload.mood]?.color || 'var(--dot-tr)';
+                  factorsChartConfig[typedPayload.mood]?.color ||
+                  'var(--dot-tr)';
                 return (
                   <Dot
                     key={payload.browser}
@@ -236,10 +200,11 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
           </div>
         )}
       </CardContent>
-      <CardFooter className='flex flex-wrap gap-4 items-center justify-center text-sm'>
-        {Object.keys(chartConfig).map((key) => {
-          const numericKey = Number(key) as keyof typeof chartConfig;
-          const { color, label } = chartConfig[numericKey];
+      <ChartFooter chartConfig={factorsChartConfig} />
+      {/* <CardFooter className='flex flex-wrap gap-4 items-center justify-center text-sm'>
+        {Object.keys(factorsChartConfig).map((key) => {
+          const numericKey = Number(key) as keyof typeof factorsChartConfig;
+          const { color, label } = factorsChartConfig[numericKey];
           return (
             <div key={key} className='flex items-center gap-2'>
               <div
@@ -250,7 +215,7 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
             </div>
           );
         })}
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };

@@ -101,6 +101,15 @@ export const chartConfig = {
   verygood: { color: 'var(--chart-5)', label: 'Very good' },
 } satisfies ChartConfig;
 
+export const factorsChartConfig = {
+  1: { color: 'var(--chart-1)', label: 'Very bad' },
+  2: { color: 'var(--chart-2)', label: 'Slightly bad' },
+  3: { color: 'var(--chart-3)', label: 'Okay' },
+  4: { color: 'var(--chart-4)', label: 'Slightly good' },
+  5: { color: 'var(--chart-5)', label: 'Very good' },
+  6: { color: 'var(--dot-tr)', label: 'Not Stated' },
+} satisfies ChartConfig;
+
 //info for articles part of the app
 
 export const articlesData = [

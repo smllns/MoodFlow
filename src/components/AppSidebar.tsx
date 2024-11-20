@@ -1,3 +1,5 @@
+//closable sidebar component, always rendered when user is logged in
+//main navigation of the app
 'use client';
 import * as React from 'react';
 import {
@@ -18,6 +20,7 @@ import ThemeToggle from './ThemeToggle';
 import { Button } from './ui/button';
 import { useRouter } from 'next/navigation';
 
+// Data representing the main navigation structure of the sidebar
 const data = {
   navMain: [
     {
@@ -77,10 +80,12 @@ export function AppSidebar({
 
   const { isMobile, setOpenMobile } = useSidebar();
 
+  // Function to handle user logout and redirect to homepage
   const handleLogout = () => {
     router.push('/');
   };
 
+  // Function to handle menu item click and navigate to the respective page
   const handleMenuClick = (page: string) => {
     setCurrentPage(page);
     if (isMobile) {
@@ -92,6 +97,7 @@ export function AppSidebar({
     <Sidebar variant='floating' {...props}>
       <SidebarHeader>
         <SidebarMenu>
+          {/* Sidebar menu header with app name and user greeting */}
           <SidebarMenuItem>
             <SidebarMenuButton size='lg' asChild className='cursor-default'>
               <a href='#'>
@@ -111,6 +117,7 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
+          {/* Main navigation menu items */}
           <SidebarMenu className='gap-2'>
             {data.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -151,9 +158,11 @@ export function AppSidebar({
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        {/* Theme toggle button */}
         <div className='w-full flex justify-end '>
           <ThemeToggle />
         </div>
+        {/* Log out button */}
         <Button type='button' onClick={handleLogout}>
           Log out
         </Button>

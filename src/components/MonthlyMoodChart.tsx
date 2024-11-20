@@ -1,35 +1,22 @@
 'use client';
 import React from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from './ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from './ui/chart';
+import { Card, CardContent, CardFooter } from './ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 import { BarChart, Bar, XAxis } from 'recharts';
-import Image from 'next/image';
 import { chartConfig, MoodDataItem } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
+import ChartNavigation from './ChartNavigation';
+import ChartFooter from './ChartFooter';
 interface MonthlyMoodChartProps {
   chartData: MoodDataItem[];
-  // info: string;
   loading: boolean;
 }
 
 const MonthlyMoodChart: React.FC<MonthlyMoodChartProps> = ({
   chartData,
-  // info,
   loading,
 }) => {
-  const [activeChart, setActiveChart] = React.useState<'3' | '6'>('6');
+  const [activeChart, setActiveChart] = React.useState<string>('6');
 
   // Функция для фильтрации данных за последние 3 и 6 месяцев
   const filterDataByMonths = (months: number) => {
@@ -95,13 +82,6 @@ const MonthlyMoodChart: React.FC<MonthlyMoodChartProps> = ({
   // Получаем данные за последние 6 и 3 месяца
   const chartData6 = groupDataByMonth(filterDataByMonths(6));
   const chartData3 = groupDataByMonth(filterDataByMonths(3));
-  console.log(chartData3);
-  console.log(chartData6);
-  console.log(activeChart);
-  // Обработка кнопок для переключения между 3 и 6 месяцами
-  const handleChartChange = (days: '3' | '6') => {
-    setActiveChart(days);
-  };
 
   // Show loading indicator while data is being loaded
   if (loading) {
@@ -112,37 +92,14 @@ const MonthlyMoodChart: React.FC<MonthlyMoodChartProps> = ({
 
   return (
     <Card className='bg-gray-100/50 dark:bg-neutral-800/50'>
-      <CardHeader className='flex flex-col items-stretch space-y-0  p-0 lg:flex-row lg:border-b border-neutral-200 dark:border-neutral-800'>
-        <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6 '>
-          <CardTitle className='pb-2 text-lg'>
-            Information for the last {activeChart === '3' ? 3 : 6} months
-          </CardTitle>
-          <CardDescription className='pb-2 text-sm'>
-            Your mood stats for the last {activeChart === '3' ? '3' : '6'}{' '}
-            months
-            {/* {activeChart === '3' ? mood : weather7} */}
-          </CardDescription>
-        </div>
-        <div className='flex '>
-          {/* Buttons to switch between charts */}
-          <button
-            onClick={() => handleChartChange('3')}
-            className={`flex-1 x0:px-6 x0:py-4 x0:border-l-0 lg:border-l  lg:border-b-0 lg:border-t-0 lg:px-4 lg:py-2 border border-neutral-200 dark:border-neutral-800 ${
-              activeChart === '3' ? 'bg-gray-100 dark:bg-neutral-800' : ''
-            }`}
-          >
-            3 Months
-          </button>
-          <button
-            onClick={() => handleChartChange('6')}
-            className={`flex-1 x0:px-6 x0:py-4 x0:border-r-0 lg:border-b-0 lg:border-t-0 lg:px-4 lg:py-2 border border-neutral-200 dark:border-neutral-800 ${
-              activeChart === '6' ? 'bg-gray-100 dark:bg-neutral-800' : ''
-            }`}
-          >
-            6 Months
-          </button>
-        </div>
-      </CardHeader>
+      <ChartNavigation
+        active={activeChart}
+        setActiveChartPeriod={setActiveChart}
+        num1={3}
+        num2={6}
+        headerClass='lg:flex-row lg:border-b'
+        dates='months'
+      />
       <CardContent>
         <ChartContainer
           config={chartConfig}
@@ -182,20 +139,7 @@ const MonthlyMoodChart: React.FC<MonthlyMoodChartProps> = ({
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex flex-wrap gap-4 items-center justify-center text-sm'>
-        {Object.keys(chartConfig).map((key) => {
-          const { color, label } = chartConfig[key as keyof typeof chartConfig];
-          return (
-            <div key={key} className='flex items-center gap-2'>
-              <div
-                style={{ backgroundColor: color }}
-                className='w-3 h-3 rounded-full'
-              ></div>
-              <span className='text-xs'>{label}</span>
-            </div>
-          );
-        })}
-      </CardFooter>
+      <ChartFooter chartConfig={chartConfig} />
     </Card>
   );
 };

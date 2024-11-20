@@ -19,6 +19,7 @@ import Image from 'next/image';
 import { AggregatedDataWeather } from '@/app/pages/WeatherPage';
 import { chartConfig } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
+import ChartFooter from './ChartFooter';
 
 interface WeatherMoodChartProps {
   chartData: AggregatedDataWeather[];
@@ -100,20 +101,7 @@ const WeatherMoodChart: React.FC<WeatherMoodChartProps> = ({
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex flex-wrap gap-4 items-center justify-center text-sm'>
-        {Object.keys(chartConfig).map((key) => {
-          const { color, label } = chartConfig[key as keyof typeof chartConfig];
-          return (
-            <div key={key} className='flex items-center gap-2'>
-              <div
-                style={{ backgroundColor: color }}
-                className='w-3 h-3 rounded-full'
-              ></div>
-              <span className='text-xs'>{label}</span>
-            </div>
-          );
-        })}
-      </CardFooter>
+      <ChartFooter chartConfig={chartConfig} />
     </Card>
   );
 };
