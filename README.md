@@ -57,7 +57,7 @@ The app is fully **responsive**, supports both **light** and **dark** themes (po
 
 You can try the live version of **MoodFlow** here:
 
-[Live Demo](https://moodflow.example.com) (Replace with actual link)
+[Live Demo](https://moodflow-by-smllns.vercel.app/) 
 
 ## Contact
 
