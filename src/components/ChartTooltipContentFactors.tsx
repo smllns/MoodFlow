@@ -26,7 +26,7 @@ const ChartTooltipContentFactors: React.FC<ChartTooltipContentFactorsProps> = ({
         <div className='flex flex-row gap-2 items-center pb-1'>
           <div
             className='w-1 h-3 rounded-full '
-            style={{ backgroundColor: moodColor }} // Устанавливаем цвет полоски
+            style={{ backgroundColor: moodColor }} 
           ></div>{' '}
           {moodText}
         </div>

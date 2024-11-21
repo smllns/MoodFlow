@@ -1,3 +1,4 @@
+// React functional component to display a mood chart based on sleep data
 'use client';
 import React from 'react';
 import {
@@ -7,12 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
-import { CartesianGrid, BarChart, Bar, XAxis } from 'recharts';
 import { AggregatedData } from '@/app/pages/SleepPage';
 import { chartConfig } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
 import ChartFooter from './ChartFooter';
+import CommonSleepChart from './CommonSleepChart';
 
 interface SleepMoodChartProps {
   chartData: AggregatedData[];
@@ -42,34 +42,11 @@ const SleepMoodChart: React.FC<SleepMoodChartProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer
+        <CommonSleepChart
+          data={chartData}
           config={chartConfig}
           className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full'
-        >
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey='sleep'
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            {Object.keys(chartConfig).map((key) => {
-              const { label, color } =
-                chartConfig[key as keyof typeof chartConfig];
-
-              return (
-                <Bar
-                  key={key}
-                  dataKey={label}
-                  fill={color}
-                  radius={[5, 5, 0, 0]}
-                />
-              );
-            })}
-          </BarChart>
-        </ChartContainer>
+        />
       </CardContent>
       <ChartFooter chartConfig={chartConfig} />
     </Card>

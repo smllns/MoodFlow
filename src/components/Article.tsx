@@ -50,6 +50,7 @@ const Article: React.FC<ArticleProps> = ({ title, description, content }) => {
     printWindow?.print();
     printWindow?.close();
   };
+
   return (
     <div>
       <PageTitle title={title} />

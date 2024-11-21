@@ -1,3 +1,4 @@
+//login component visible on the first page of the app
 'use client';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,21 +27,21 @@ export function LoginForm({
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
+  // Handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!email || !password) {
       setError('🔍 Please enter both email and password.');
       return;
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex pattern for email validation
     if (!emailRegex.test(email)) {
       setError('🦧 Invalid email format. Please enter a valid email address.');
       return;
     }
     try {
-      await login(email, password);
-      router.push('/userprofile');
+      await login(email, password); // Call login function with email and password
+      router.push('/userprofile'); // Redirect to user profile page after successful login
     } catch (error: any) {
       setError(error.message);
     }

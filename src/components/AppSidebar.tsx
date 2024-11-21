@@ -101,7 +101,7 @@ export function AppSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton size='lg' asChild className='cursor-default'>
               <a href='#'>
-                <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-[#f5f5f5] dark:bg-[#181818]  text-[#11111a] dark:text-[#ffffff]'>
+                <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-[#f5f5f5] dark:bg-[#181818]'>
                   <p className='text-base'>💖</p>
                 </div>
                 <span className='font-semibold'>MoodFlow</span>
@@ -109,7 +109,7 @@ export function AppSidebar({
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <div className='flex items-center justify-center rounded-lg  text-[#11111a] dark:text-[#ffffff]'>
+            <div className='flex items-center justify-center rounded-lg'>
               <p>Hello {userName} 💗</p>
             </div>
           </SidebarMenuItem>
@@ -125,8 +125,8 @@ export function AppSidebar({
                   <a
                     href='#'
                     onClick={(e) => {
-                      e.preventDefault(); // Предотвращаем переход по ссылке
-                      handleMenuClick(item.desc.toLowerCase()); // Изменяем страницу
+                      e.preventDefault();
+                      handleMenuClick(item.desc.toLowerCase());
                     }}
                     className='font-medium'
                   >

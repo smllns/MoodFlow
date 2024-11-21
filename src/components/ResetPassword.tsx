@@ -1,3 +1,4 @@
+//reset password functionality
 'use client';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -14,17 +15,18 @@ import {
 } from './ui/card';
 
 export function ResetPassword({ onBack }: { onBack: () => void }) {
+  // State to manage user email input, reset message, and error message
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Handle password reset submission
   const handleReset = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!email) {
       setError('🔍 Please enter your email.');
       return;
     }
-
     try {
       await sendPasswordResetEmail(auth, email);
       setMessage('✈️ Check your email for the password reset link!');

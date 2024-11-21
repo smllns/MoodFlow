@@ -1,13 +1,13 @@
+// React functional interactive component to display a mood chart based on sleep data
 'use client';
 import React from 'react';
 import { Card, CardContent } from './ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
-import { CartesianGrid, BarChart, Bar, XAxis } from 'recharts';
 import Image from 'next/image';
 import { AggregatedData } from '@/app/pages/SleepPage';
 import { chartConfig } from '@/lib/constants';
 import ChartNavigation from './ChartNavigation';
 import ChartFooter from './ChartFooter';
+import CommonSleepChart from './CommonSleepChart';
 
 interface SleepMoodChartProps {
   chartData7: AggregatedData[];
@@ -25,6 +25,7 @@ const SleepMoodChartInteractive: React.FC<SleepMoodChartProps> = ({
 }) => {
   const [activeChart, setActiveChart] = React.useState<string>('30');
 
+  // Show loading indicator while data is being loaded
   if (loading) {
     return (
       <Card className='bg-gray-100/50 dark:bg-neutral-800/50 flex items-center justify-center x0:w-[288px] x0:h-[347px] xs:w-[449px] xs:h-[406px] sm:w-[545px] sm:h-[428px] md:w-[432px] md:h-[396px] lg:w-[545px] lg:h-[428x]'>
@@ -46,36 +47,11 @@ const SleepMoodChartInteractive: React.FC<SleepMoodChartProps> = ({
         descData2={sleep30}
       />
       <CardContent>
-        <ChartContainer
+        <CommonSleepChart
+          data={activeChart === '30' ? chartData30 : chartData7}
           config={chartConfig}
           className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full'
-        >
-          <BarChart
-            accessibilityLayer
-            data={activeChart === '30' ? chartData30 : chartData7}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey='sleep'
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            {Object.keys(chartConfig).map((key) => {
-              const { label, color } =
-                chartConfig[key as keyof typeof chartConfig];
-              return (
-                <Bar
-                  key={key}
-                  dataKey={label}
-                  fill={color}
-                  radius={[5, 5, 0, 0]}
-                />
-              );
-            })}
-          </BarChart>
-        </ChartContainer>
+        />
       </CardContent>
       <ChartFooter chartConfig={chartConfig} />
     </Card>

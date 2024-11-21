@@ -1,3 +1,4 @@
+//line chart used in factors charts
 'use client';
 import React from 'react';
 import { LineChart, CartesianGrid, YAxis, XAxis, Line, Dot } from 'recharts';

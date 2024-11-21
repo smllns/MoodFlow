@@ -1,3 +1,4 @@
+// React interactive functional component to display a mood chart (bar chart)
 'use client';
 import React from 'react';
 import { Card, CardContent } from './ui/card';
@@ -18,41 +19,40 @@ const MonthlyMoodChart: React.FC<MonthlyMoodChartProps> = ({
 }) => {
   const [activeChart, setActiveChart] = React.useState<string>('6');
 
-  // Функция для фильтрации данных за последние 3 и 6 месяцев
+  // Function to filter the data based on the number of months (3 or 6)
   const filterDataByMonths = (months: number) => {
     const today = new Date();
-    const currentMonth = today.getMonth(); // Получаем текущий месяц (0-11)
-    const currentYear = today.getFullYear(); // Получаем текущий год
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
 
-    // Рассчитываем диапазон месяцев (например, 3 месяца назад)
-    const monthsAgo = currentMonth - months + 1; // +1, потому что нужно включить текущий месяц
+    // Calculate the month range
+    const monthsAgo = currentMonth - months + 1;
 
+    // Filter the chartData based on the calculated month range
     const filteredData = chartData.filter((entry) => {
       const entryDate = new Date(entry.date);
-      const entryMonth = entryDate.getMonth(); // Месяц записи (0-11)
-      const entryYear = entryDate.getFullYear(); // Год записи
+      const entryMonth = entryDate.getMonth();
+      const entryYear = entryDate.getFullYear();
 
-      // Проверяем, находится ли запись в диапазоне последних 'months' месяцев
       if (entryYear === currentYear) {
-        // Если год записи совпадает с текущим, проверяем месяц
         return entryMonth >= monthsAgo && entryMonth <= currentMonth;
       } else if (entryYear === currentYear - 1 && months === 6) {
-        // Если год записи - прошлый, а фильтруем за последние 6 месяцев
         return entryMonth <= currentMonth && entryMonth >= 6;
       }
       return false;
     });
-
     return filteredData;
   };
 
-  // Группировка данных по месяцам
+  // Function to group data by month
   const groupDataByMonth = (data: MoodDataItem[]) => {
     const groupedData: Record<string, any> = {};
 
     data.forEach((entry) => {
       const entryDate = new Date(entry.date);
-      const month = entryDate.toLocaleString('en-US', { month: 'short' }); // Nov, Oct
+      const month = entryDate.toLocaleString('en-US', { month: 'short' });
+
+      // Initialize the month entry if it doesn't exist
       if (!groupedData[month]) {
         groupedData[month] = {
           verybad: 0,
@@ -62,13 +62,12 @@ const MonthlyMoodChart: React.FC<MonthlyMoodChartProps> = ({
           verygood: 0,
         };
       }
-      const mood = entry.data.mood.toLowerCase().replace(' ', ''); // Приводим настроение к стандартному виду
-      // Увеличиваем счетчик настроений для месяца
+      const mood = entry.data.mood.toLowerCase().replace(' ', '');
+
       if (groupedData[month][mood] !== undefined) {
         groupedData[month][mood] += 1;
       }
     });
-
     return Object.entries(groupedData).map(([month, moodCounts]) => ({
       month,
       verybad: moodCounts.verybad,
@@ -79,7 +78,7 @@ const MonthlyMoodChart: React.FC<MonthlyMoodChartProps> = ({
     }));
   };
 
-  // Получаем данные за последние 6 и 3 месяца
+  // Get data for the last 6 and 3 months
   const chartData6 = groupDataByMonth(filterDataByMonths(6));
   const chartData3 = groupDataByMonth(filterDataByMonths(3));
 
@@ -111,31 +110,15 @@ const MonthlyMoodChart: React.FC<MonthlyMoodChartProps> = ({
           >
             <XAxis dataKey='month' type='category' />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar
-              dataKey='verybad'
-              stackId='a'
-              fill='var(--chart-1)'
-              radius={0}
-            />
-            <Bar
-              dataKey='slightlybad'
-              stackId='a'
-              fill='var(--chart-2)'
-              radius={0}
-            />
-            <Bar dataKey='okay' stackId='a' fill='var(--chart-3)' radius={0} />
-            <Bar
-              dataKey='slightlygood'
-              stackId='a'
-              fill='var(--chart-4)'
-              radius={0}
-            />
-            <Bar
-              dataKey='verygood'
-              stackId='a'
-              fill='var(--chart-5)'
-              radius={0}
-            />
+            {Object.entries(chartConfig).map(([key, { color, label }]) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                stackId='a'
+                fill={color}
+                radius={0}
+              />
+            ))}
           </BarChart>
         </ChartContainer>
       </CardContent>

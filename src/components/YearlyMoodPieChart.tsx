@@ -1,3 +1,4 @@
+// React interactive functional component to display a mood chart (pie chart)
 'use client';
 import React from 'react';
 import {

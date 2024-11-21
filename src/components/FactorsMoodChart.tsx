@@ -4,9 +4,6 @@ import { useState } from 'react';
 import { AggregatedDataFactors } from '@/app/pages/FactorsPage';
 import React from 'react';
 import { Card, CardContent } from './ui/card';
-import { ChartContainer, ChartTooltip } from './ui/chart';
-import { CartesianGrid, XAxis, LineChart, Line, Dot, YAxis } from 'recharts';
-import ChartTooltipContentFactors from './ChartTooltipContentFactors';
 import { factorsChartConfig, monthNames } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
 import ChartNavigation from './ChartNavigation';
@@ -94,79 +91,6 @@ const FactorsMoodChart: React.FC<FactorsMoodChartProps> = ({
           factorsConfig={factorsChartConfig}
           className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full'
         />
-        {/* <ChartContainer
-          config={factorsChartConfig}
-          className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full '
-        >
-          <LineChart accessibilityLayer data={formattedData}>
-            <CartesianGrid vertical={false} />
-            <YAxis
-              domain={[1, 5]}
-              tickCount={5}
-              tickLine={false}
-              axisLine={false}
-              hide={true}
-            />
-            <XAxis
-              dataKey='date'
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              hide={true}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={({ payload }) => {
-                if (!payload || payload.length === 0) return null;
-                const data = payload[0].payload as {
-                  month: string;
-                  date: number;
-                  mood: 1 | 2 | 3 | 4 | 5 | 6;
-                  factors: string[];
-                };
-                const formattedDate = `${data.month} ${data.date}`;
-                const moodText =
-                  factorsChartConfig[data.mood]?.label || 'Unknown';
-                const factorsList = data.factors.length
-                  ? data.factors.join(', ')
-                  : 'Not stated';
-                const moodColor =
-                  factorsChartConfig[data.mood]?.color || 'var(--dot-tr)';
-
-                return (
-                  <ChartTooltipContentFactors
-                    formattedDate={formattedDate}
-                    moodText={moodText}
-                    factorsList={factorsList}
-                    moodColor={moodColor}
-                  />
-                );
-              }}
-            />
-            <Line
-              dataKey='mood'
-              type='bumpX'
-              stroke='var(--line)'
-              strokeWidth={2}
-              dot={({ payload, ...props }) => {
-                const typedPayload = payload as { mood: 1 | 2 | 3 | 4 | 5 | 6 };
-                const color =
-                  factorsChartConfig[typedPayload.mood]?.color ||
-                  'var(--dot-tr)';
-                return (
-                  <Dot
-                    key={payload.browser}
-                    r={5}
-                    cx={props.cx}
-                    cy={props.cy}
-                    fill={color}
-                    stroke={color}
-                  />
-                );
-              }}
-            />
-          </LineChart>
-        </ChartContainer> */}
         <div className='flex flex-row justify-around text-neutral-500 dark:text-neutral-400 text-sm font-normal'>
           {sortedMonths.map((month, index) => (
             <p key={index}>{month.monthName}</p>

@@ -1,3 +1,4 @@
+//sign up component visible on the first page of the app
 'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -16,12 +17,14 @@ import { useRouter } from 'next/navigation';
 
 export function SignUpForm({ toggleForm }: { toggleForm: () => void }) {
   const router = useRouter();
+  // State variables for user input (name, email, password, confirmPassword) and error messages
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
+  // Handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -114,6 +117,7 @@ export function SignUpForm({ toggleForm }: { toggleForm: () => void }) {
             </Button>
           </div>
         </form>
+        {/* Link to toggle between login and sign up forms */}
         <div className='mt-4 text-center text-sm'>
           Already have an account?{' '}
           <Link

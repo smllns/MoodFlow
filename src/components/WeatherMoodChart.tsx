@@ -1,3 +1,4 @@
+// React functional component to display a mood chart based on weather data
 'use client';
 import React from 'react';
 import {
@@ -7,12 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
-import { CartesianGrid, BarChart, Bar, XAxis } from 'recharts';
 import { AggregatedDataWeather } from '@/app/pages/WeatherPage';
 import { chartConfig } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
 import ChartFooter from './ChartFooter';
+import CommonWeatherChart from './CommonWeatherChart';
 
 interface WeatherMoodChartProps {
   chartData: AggregatedDataWeather[];
@@ -43,56 +43,11 @@ const WeatherMoodChart: React.FC<WeatherMoodChartProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer
-          config={chartConfig}
+        <CommonWeatherChart
+          data={chartData}
+          chartConfig={chartConfig}
           className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full'
-        >
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey='weather'
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar
-              dataKey='Very bad'
-              stackId='a'
-              fill='var(--chart-1)'
-              // radius={[0, 0, 4, 4]}
-              radius={0}
-            />
-            <Bar
-              dataKey='Slightly bad'
-              stackId='a'
-              fill='var(--chart-2)'
-              // radius={[4, 4, 0, 0]}
-              radius={0}
-            />
-            <Bar
-              dataKey='Okay'
-              stackId='a'
-              fill='var(--chart-3)'
-              // radius={[4, 4, 0, 0]}
-              radius={0}
-            />
-            <Bar
-              dataKey='Slightly good'
-              stackId='a'
-              fill='var(--chart-4)'
-              // radius={[4, 4, 0, 0]}
-              radius={0}
-            />
-            <Bar
-              dataKey='Very good'
-              stackId='a'
-              fill='var(--chart-5)'
-              // radius={[4, 4, 0, 0]}
-              radius={0}
-            />
-          </BarChart>
-        </ChartContainer>
+        />
       </CardContent>
       <ChartFooter chartConfig={chartConfig} />
     </Card>
