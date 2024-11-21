@@ -1,10 +1,10 @@
+//shadcn ui component with implemented changes
 'use client';
-
 import * as React from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'; // Example import for VisuallyHidden
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { cn } from '@/lib/utils';
 
 const Sheet = SheetPrimitive.Root;
@@ -60,7 +60,6 @@ const SheetContent = React.forwardRef<
       className={cn(sheetVariants({ side }), className)}
       {...props}
     >
-      {/* Добавляем скрытый заголовок для доступности */}
       <VisuallyHidden>
         <h2>Sheet Content</h2>
       </VisuallyHidden>

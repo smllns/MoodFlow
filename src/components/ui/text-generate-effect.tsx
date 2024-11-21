@@ -1,3 +1,4 @@
+//Aceternity UI component with implemented changes
 'use client';
 import { useEffect } from 'react';
 import { motion, stagger, useAnimate } from 'framer-motion';

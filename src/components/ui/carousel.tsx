@@ -1,5 +1,5 @@
+//shadcn ui component using Embla Carousel library
 'use client';
-
 import * as React from 'react';
 import useEmblaCarousel, {
   type UseEmblaCarouselType,

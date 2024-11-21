@@ -1,5 +1,5 @@
+//shadcn component with implemented changes
 'use client';
-
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { VariantProps, cva } from 'class-variance-authority';
@@ -262,8 +262,8 @@ const Sidebar = React.forwardRef<
 );
 Sidebar.displayName = 'Sidebar';
 const SvgIcon = () => {
-  const { isDark } = useTheme(); // Получаем текущую тему
-  const strokeColor = isDark ? '#ffffff' : '#000000'; // Устанавливаем цвет в зависимости от темы
+  const { isDark } = useTheme(); 
+  const strokeColor = isDark ? '#ffffff' : '#000000'; 
 
   return (
     <svg

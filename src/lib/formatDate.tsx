@@ -1,5 +1,5 @@
+//formatting date for displaying 
 'use client';
-import React from 'react';
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const day = date.getDate();

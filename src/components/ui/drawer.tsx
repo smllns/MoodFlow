@@ -1,5 +1,5 @@
+//originally shadcn ui component using Vaul with implemented changes
 'use client';
-
 import * as React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 import { cn } from '@/lib/utils';

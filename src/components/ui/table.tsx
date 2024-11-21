@@ -1,5 +1,5 @@
+//shadcn ui component with implemented changes
 import * as React from 'react';
-
 import { cn } from '@/lib/utils';
 
 const Table = React.forwardRef<
@@ -9,11 +9,10 @@ const Table = React.forwardRef<
   <div className='relative w-full overflow-auto '>
     <table
       ref={ref}
-      // className={cn('w-full caption-bottom text-sm', className)}
       className={cn(
         'w-full min-w-0 table-auto caption-bottom text-sm ',
         className
-      )} // min-w-0 важно для корректной работы с overflow
+      )}
       {...props}
     />
   </div>

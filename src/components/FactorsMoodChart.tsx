@@ -1,8 +1,8 @@
 // React functional component to display a mood chart based on factors
 'use client';
+import React from 'react';
 import { useState } from 'react';
 import { AggregatedDataFactors } from '@/app/pages/FactorsPage';
-import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { factorsChartConfig, monthNames } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';

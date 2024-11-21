@@ -1,5 +1,5 @@
+// Generates a range of dates starting from today, going back a given number of days.
 'use client';
-import React from 'react';
 const generateDateRange = (days: number) => {
   const today = new Date();
   const dateRange = [];

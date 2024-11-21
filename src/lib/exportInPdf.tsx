@@ -1,4 +1,4 @@
-// // Function to export data table as a PDF
+// Function to export data table as a PDF
 'use client';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
