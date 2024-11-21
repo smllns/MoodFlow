@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MoodFlow
 
-## Getting Started
+Welcome to **MoodFlow** – a mood tracker app that helps you track and analyze your emotional state over time. This app allows you to log your moods for different days, visualize them through charts, and explore insightful articles related to mood and mental health. **MoodFlow** is fully responsive, features both light and dark modes, and is built using **React (Next.js)**, **TypeScript** and **TailwindCSS**.
 
-First, run the development server:
+![MoodFlow Preview](./public/moodFlowStart.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Table of Contents
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [About the Project](#about-the-project)
+- [Key Features](#key-features)
+- [Technologies Used](#technologies-used)
+- [Demo](#demo)
+- [Contact](#contact)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## About the Project
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**MoodFlow** is a comprehensive mood tracker designed to help users monitor their emotional well-being. The app allows you to log your mood for any given day and presents the data through visually appealing charts using **Recharts**. It also features a variety of mood-related articles for self-improvement and better understanding of emotional health.
 
-## Learn More
+![MoodFlowStarterPage](./public/MoodFlowStarterPage.png)
 
-To learn more about Next.js, take a look at the following resources:
+The app is fully **responsive**, supports both **light** and **dark** themes (powered by **TailwindCSS**), and ensures a smooth, engaging user experience. MoodFlow is built with a modern tech stack including **React**, **Next.js**, and **Firebase** for user authentication and data storage.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Key Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Mood Tracking**: Log your mood for each day and track emotional patterns over time.
+- **Interactive Charts**: View your mood data through customizable charts and graphs powered by **Recharts**.
+- **Custom Calendar**: Track moods directly on a custom, interactive calendar built with **React DayPicker**.
+- **User Data Table**: Access a complete view of your mood data, displayed in an interactive and customizable table using **TanStack Table**.
+- **Responsive Design**: Optimized for mobile, tablet, and desktop views.
+- **Dark and Light Themes**: Switch between dark and light themes with ease using **TailwindCSS**.
+- **Authentication**: Secure user login and data storage through **Firebase**.
+- **Account Management**: Update your profile, including **name**, **email**, **username**, and **password**; delete your account or clear all mood data from within the app.
+- **Articles & Resources**: Read mood-related articles to learn more about managing mental health.
+- **ShadCN Components**: A collection of reusable, accessible UI components from **ShadCN** for a smooth UI/UX experience.
+- **PDF Export**: Export your mood data and history as a PDF using **jsPDF**.
 
-## Deploy on Vercel
+![MoodFlow Preview](./public/MoodFlowGraphPrev.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Technologies Used
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **React (Next.js)**: Framework for building the app’s user interface, providing server-side rendering and static site generation.
+- **TypeScript**: Ensures type safety and improves code quality.
+- **TailwindCSS**: For styling, including custom themes and responsive layouts.
+- **ShadCN**: UI components library for building accessible and customizable components.
+- **Aceternity UI Library**: Customizable UI components used in the Hero section of the project.
+- **Recharts**: For rendering interactive charts and graphs based on mood data.
+- **Firebase**: Provides user authentication and data storage for persistent mood tracking.
+- **Framer Motion**: Used to add smooth animations and transitions to the UI.
+- **React DayPicker**: For creating a custom calendar interface to select dates for mood tracking.
+- **React Hook Form**: For handling form submissions efficiently.
+- **TanStack Table**: For displaying detailed information about the user's mood data in a customizable and interactive table format.
+- **Zod**: For schema validation and form data validation alongside React Hook Form.
+- **Simplex Noise**: For generating dynamic, animated background waves.
+- **jsPDF**: Used to generate and export user data to PDF format for download.
+
+## Demo
+
+You can try the live version of **MoodFlow** here:
+
+[Live Demo](https://moodflow.example.com) (Replace with actual link)
+
+## Contact
+
+Feel free to reach out for any questions, suggestions, or opportunities!
+
+- **Email**: [marysmoly@gmail.com](mailto:marysmoly@gmail.com)
+- **LinkedIn**: [LinkedIn Profile](https://www.linkedin.com/in/smllns/)
+- **GitHub**: [GitHub Profile](https://github.com/smllns)
