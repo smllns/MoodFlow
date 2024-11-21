@@ -143,7 +143,6 @@ const WeatherPage: React.FC<PageProps> = ({
       <WeatherMoodChartInteractive
         chartData7={weekChartData}
         chartData30={monthChartData}
-        // info='Information for the last 30 days'
         loading={loading}
         weather7={averageWeatherDataWeek}
         weather30={averageWeatherDataMonth}

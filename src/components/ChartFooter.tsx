@@ -1,3 +1,4 @@
+//chart footer reusable component for charts
 'use client';
 import React from 'react';
 import { CardFooter } from './ui/card';

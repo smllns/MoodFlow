@@ -4,18 +4,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from './ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from './ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 import { CartesianGrid, BarChart, Bar, XAxis } from 'recharts';
-import Image from 'next/image';
 import { AggregatedData } from '@/app/pages/SleepPage';
 import { chartConfig } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';

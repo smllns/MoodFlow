@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { AggregatedDataFactors } from '@/app/pages/FactorsPage';
 import React from 'react';
-import { Card, CardContent, CardFooter } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { ChartContainer, ChartTooltip } from './ui/chart';
 import { CartesianGrid, XAxis, LineChart, Line, Dot, YAxis } from 'recharts';
 import ChartTooltipContentFactors from './ChartTooltipContentFactors';
@@ -10,6 +10,7 @@ import { factorsChartConfig, monthNames } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
 import ChartNavigation from './ChartNavigation';
 import ChartFooter from './ChartFooter';
+import CommonFactorsChart from './CommonFactorsChart';
 
 interface FactorsMoodChartProps {
   weekChartData: AggregatedDataFactors[];
@@ -97,7 +98,14 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
         dates='days'
       />
       <CardContent>
-        <ChartContainer
+        <CommonFactorsChart
+          data={
+            activeChartPeriod === '7' ? formattedWeekData : formattedMonthData
+          }
+          factorsConfig={factorsChartConfig}
+          className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full'
+        />
+        {/* <ChartContainer
           config={factorsChartConfig}
           className='min-h-[100px] lg:min-w-[580px] xl:min-w-[670px] 2xl:min-w-[900px] w-full '
         >
@@ -176,7 +184,7 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
               }}
             />
           </LineChart>
-        </ChartContainer>
+        </ChartContainer> */}
 
         {activeChartPeriod === '7' && (
           <div className='x0:hidden xs:flex flex-row justify-around text-neutral-500 dark:text-neutral-400 text-sm font-normal'>
@@ -188,8 +196,6 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
             ))}
           </div>
         )}
-
-        {/* Блок с датами для 30 дней */}
         {activeChartPeriod === '30' && (
           <div className='x0:hidden xl:flex flex-row justify-around text-neutral-500 dark:text-neutral-400 text-sm font-normal'>
             {sortedMonthDates.map((date, index) => (
@@ -201,21 +207,6 @@ const FactorsMoodChartInteractive: React.FC<FactorsMoodChartProps> = ({
         )}
       </CardContent>
       <ChartFooter chartConfig={factorsChartConfig} />
-      {/* <CardFooter className='flex flex-wrap gap-4 items-center justify-center text-sm'>
-        {Object.keys(factorsChartConfig).map((key) => {
-          const numericKey = Number(key) as keyof typeof factorsChartConfig;
-          const { color, label } = factorsChartConfig[numericKey];
-          return (
-            <div key={key} className='flex items-center gap-2'>
-              <div
-                style={{ backgroundColor: color }}
-                className='w-3 h-3 rounded-full'
-              ></div>
-              <span className='text-xs'>{label}</span>
-            </div>
-          );
-        })}
-      </CardFooter> */}
     </Card>
   );
 };

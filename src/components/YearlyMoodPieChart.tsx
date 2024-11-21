@@ -4,18 +4,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from './ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from './ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 import { PieChart, Pie, Cell } from 'recharts';
-import Image from 'next/image';
 import { AggregatedDataMood } from '@/app/pages/FullStatsPage';
 import {
   Select,
@@ -27,6 +20,7 @@ import {
 import { chartConfig } from '@/lib/constants';
 import LoadingSpinner from './LoadingSpinner';
 import ChartFooter from './ChartFooter';
+
 interface YearlyMoodPieChartProps {
   chartData1: AggregatedDataMood[];
   chartData2: AggregatedDataMood[];

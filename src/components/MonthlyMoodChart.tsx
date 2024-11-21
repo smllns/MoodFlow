@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Card, CardContent, CardFooter } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 import { BarChart, Bar, XAxis } from 'recharts';
 import { chartConfig, MoodDataItem } from '@/lib/constants';
