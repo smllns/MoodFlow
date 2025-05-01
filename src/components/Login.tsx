@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { login } from '@/app/functions/authService';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
 export function LoginForm({
   toggleForm,
@@ -26,29 +26,33 @@ export function LoginForm({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!email || !password) {
       setError('🔍 Please enter both email and password.');
       return;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex pattern for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('🦧 Invalid email format. Please enter a valid email address.');
       return;
     }
+
     try {
-      await login(email, password); // Call login function with email and password
-      router.push('/userprofile'); // Redirect to user profile page after successful login
+      setLoading(true);
+      await login(email, password);
+      router.push('/userprofile');
     } catch (error: any) {
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Card className='mx-auto  x0:mx-4 max-w-sm'>
+    <Card className='mx-auto x0:mx-4 max-w-sm'>
       <CardHeader>
         <CardTitle className='text-2xl pb-5'>Login</CardTitle>
         <CardDescription>
@@ -73,45 +77,46 @@ export function LoginForm({
             <div className='grid gap-2'>
               <div className='flex items-center justify-between'>
                 <Label htmlFor='password'>Password</Label>
-                <Link
-                  href='#'
-                  className='underline dark:hover:text-gray-300 hover:text-gray-500 x0:text-xs sm:text-sm '
-                  onClick={(e) => {
-                    e.preventDefault();
-                    resetPass();
-                  }}
+                <button
+                  type='button'
+                  onClick={resetPass}
+                  className='underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm text-sm text-muted-foreground hover:text-primary'
                 >
                   Forgot your password?
-                </Link>
+                </button>
               </div>
               <Input
                 id='password'
                 type='password'
                 placeholder='password'
-                autoComplete='password'
+                autoComplete='current-password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             {error && <p className='text-red-500'>{error}</p>}
-            <Button type='submit' className='w-full'>
-              Login
+            <Button type='submit' className='w-full' disabled={loading}>
+              {loading ? (
+                <div className='flex items-center justify-center gap-2'>
+                  <Loader2 className='animate-spin h-4 w-4' />
+                  Logging in...
+                </div>
+              ) : (
+                'Login'
+              )}
             </Button>
           </div>
         </form>
         <div className='mt-4 text-center text-sm'>
           Don&apos;t have an account?{' '}
-          <Link
-            href='#'
-            className='underline dark:hover:text-gray-300 hover:text-gray-500'
-            onClick={(e) => {
-              e.preventDefault();
-              toggleForm();
-            }}
+          <button
+            type='button'
+            onClick={toggleForm}
+            className='underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm text-sm text-muted-foreground hover:text-primary'
           >
             Sign up
-          </Link>
+          </button>
         </div>
       </CardContent>
     </Card>

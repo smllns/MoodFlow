@@ -1,6 +1,5 @@
 //sign up component visible on the first page of the app
 'use client';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,17 +13,17 @@ import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { register } from '@/app/functions/authService';
 import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 export function SignUpForm({ toggleForm }: { toggleForm: () => void }) {
   const router = useRouter();
-  // State variables for user input (name, email, password, confirmPassword) and error messages
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -44,16 +43,20 @@ export function SignUpForm({ toggleForm }: { toggleForm: () => void }) {
       );
       return;
     }
+
     try {
+      setLoading(true);
       await register(name, email, password);
       router.push('/userprofile');
     } catch (error: any) {
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Card className='mx-auto x0:mx-4  max-w-sm'>
+    <Card className='mx-auto x0:mx-4 max-w-sm'>
       <CardHeader>
         <CardTitle className='text-2xl pb-5'>Sign Up</CardTitle>
         <CardDescription>
@@ -61,7 +64,7 @@ export function SignUpForm({ toggleForm }: { toggleForm: () => void }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} aria-busy={loading}>
           <div className='grid gap-4'>
             <div className='grid gap-2'>
               <Label htmlFor='name'>Name</Label>
@@ -93,7 +96,7 @@ export function SignUpForm({ toggleForm }: { toggleForm: () => void }) {
                 id='password'
                 type='password'
                 placeholder='password'
-                autoComplete='password'
+                autoComplete='new-password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -105,31 +108,34 @@ export function SignUpForm({ toggleForm }: { toggleForm: () => void }) {
                 id='confirmPassword'
                 type='password'
                 placeholder='password'
-                autoComplete='current-password'
+                autoComplete='new-password'
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
             {error && <p className='text-red-500'>{error}</p>}
-            <Button type='submit' className='w-full'>
-              Sign Up
+            <Button type='submit' className='w-full' disabled={loading}>
+              {loading ? (
+                <div className='flex items-center justify-center gap-2'>
+                  <Loader2 className='animate-spin h-4 w-4' />
+                  Signing up...
+                </div>
+              ) : (
+                'Sign Up'
+              )}
             </Button>
           </div>
         </form>
-        {/* Link to toggle between login and sign up forms */}
         <div className='mt-4 text-center text-sm'>
           Already have an account?{' '}
-          <Link
-            href='#'
-            className='underline dark:hover:text-gray-300 hover:text-gray-500'
-            onClick={(e) => {
-              e.preventDefault();
-              toggleForm();
-            }}
+          <button
+            type='button'
+            onClick={toggleForm}
+            className='underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm text-sm text-muted-foreground hover:text-primary'
           >
             Log in
-          </Link>
+          </button>
         </div>
       </CardContent>
     </Card>
